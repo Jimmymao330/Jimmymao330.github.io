@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>臺北市數位實驗高中</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-size: 16px; /* Default font size */
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+.header .logo {
+    display: flex;
+    align-items: center;
+}
+.header .logo img {
+    height: 50px;
+    margin-right: 10px;
+}
+.header .logo-text {
+    font-size: 18px;
+    color: #003366;
+}
+.header .actions {
+    display: flex;
+    align-items: center;
+}
+.header .actions a {
+    margin-left: 10px;
+    text-decoration: none;
+    color: #003366;
+    font-size: 14px;
+}
+.header .social-icons img {
+    height: 30px;
+    margin-left: 10px;
+}
+.header .font-size-buttons button {
+    margin-left: 5px;
+    padding: 5px 10px;
+    background-color: #ddd;
+    border: none;
+    cursor: pointer;
+}
+.navbar {
+    background-color: #6ec1e4;
+    overflow: hidden;
+}
+.navbar a, .navbar .dropbtn {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: inherit; /* Inherit font size from body */
+}
+.navbar .dropdown {
+    float: left;
+    overflow: hidden;
+}
+.navbar .dropdown .dropbtn {
+    border: none;
+    outline: none;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+}
+.navbar .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    margin-top: 0; /* Adjust the dropdown position */
+    top: 115px;
+}
+.navbar .dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    font-size: inherit; /* Inherit font size from body */
+}
+.navbar .dropdown-content a:hover {
+    background-color: #ddd;
+}
+.navbar .dropdown:hover .dropdown-content {
+    display: block;
+}
+.carousel {
+    position: relative;
+    max-width: 100%;
+    margin: 20px auto;
+    overflow: hidden;
+}
+.carousel img {
+    width: 100%;
+    display: none;
+}
+.carousel img.active {
+    display: block;
+}
+.carousel .controls {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+.carousel .controls button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+.button-container .circle-button {
+    background-color: #6ec1e4;
+    color: white;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px;
+    text-align: center;
+    font-size: 14px;
+    text-decoration: none;
+}
+.button-container .circle-button img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 5px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">
+        <img src="logo.png" alt="T-School Logo">
+        <div class="logo-text">
+            <div>臺北市數位實驗高級中等學校</div>
+            <div>Taipei Digital Experimental High School</div>
+        </div>
+    </div>
+    <div class="actions">
+        <a href="#login">登入</a>
+        <a href="#guide">導覽</a>
+        <a href="#home">首頁</a>
+        <div class="font-size-buttons">
+            <button onclick="setFontSize('small')">小</button>
+            <button onclick="setFontSize('medium')">中</button>
+            <button onclick="setFontSize('large')">大</button>
+        </div>
+        <div class="social-icons">
+            <img src="facebook.png" alt="Facebook">
+            <img src="youtube.png" alt="YouTube">
+            <img src="line.png" alt="LINE">
+        </div>
+    </div>
+</div>
+
+<div class="navbar">
+    <a href="about.html">關於 T-school</a>
+    <div class="dropdown">
+        <button class="dropbtn">行政團隊</button>
+        <div class="dropdown-content">
+            <a href="#duties">業務職掌</a>
+            <a href="#structure">組織架構</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">課程介紹</button>
+        <div class="dropdown-content">
+            <a href="#course-introduction">課程介紹</a>
+            <a href="#self-development">自我發展</a>
+            <a href="#culture">文化社會</a>
+            <a href="#knowledge">學科知識</a>
+            <a href="#individual-needs">個別需求</a>
+            <a href="#graduation-project">畢業專題</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">校園公告</button>
+        <div class="dropdown-content">
+            <a href="#announcements">校園公告</a>
+            <a href="#gender-equality">性別平等專區</a>
+            <a href="#disaster-education">防災教育專區</a>
+            <a href="#friendly-campus">友善校園</a>
+            <a href="#international-education">國際教育專區</a>
+            <a href="#quality-school">優質學校專區</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">學生專區</button>
+        <div class="dropdown-content">
+            <a href="#course-selection">課程選課</a>
+            <a href="#file-area">檔案專區</a>
+            <a href="#guidance">輔導資訊</a>
+            <a href="#learning-resources">學習歷程檔案資源站</a>
+            <a href="#digital-platform">數位平臺</a>
+        </div>
+    </div>
+    <a href="#admissions">招生專區</a>
+    <a href="#partners">夥伴招募</a>
+</div>
+
+<div class="carousel">
+    <img src="slide1.png" alt="Slide 1" class="active">
+    <img src="slide2.png" alt="Slide 2">
+    <img src="slide3.png" alt="Slide 3">
+    <div class="controls">
+        <button onclick="prevSlide()">&#10094;</button>
+        <button onclick="nextSlide()">&#10095;</button>
+    </div>
+</div>
+
+<div class="button-container">
+    <a href="#student-achievements" class="circle-button">
+        <img src="achievement.png" alt="學生成果">
+        學生<br>成果
+    </a>
+    <a href="#media-reports" class="circle-button">
+        <img src="media.png" alt="媒體報導">
+        媒體<br>報導
+    </a>
+    <a href="#partners" class="circle-button">
+        <img src="partners.png" alt="合作夥伴">
+        合作<br>夥伴
+    </a>
+    <a href="#visit-records" class="circle-button">
+        <img src="visit.png" alt="參訪記錄">
+        參訪<br>記錄
+    </a>
+</div>
+
+<script>
+function setFontSize(size) {
+    let fontSize;
+    switch(size) {
+        case 'small':
+            fontSize = '12px';
+            break;
+        case 'medium':
+            fontSize = '16px';
+            break;
+        case 'large':
+            fontSize = '20px';
+            break;
+    }
+    document.body.style.fontSize = fontSize;
+    const elements = document.querySelectorAll('.navbar a, .navbar .dropbtn, .navbar .dropdown-content a');
+    elements.forEach(element => {
+        element.style.fontSize = fontSize;
+    });
+}
+
+let currentSlide = 0;
+const slides = document.querySelectorAll('.carousel img');
+
+function showSlide(index) {
+    slides.forEach((slide, i) => {
+        slide.classList.remove('active');
+        if (i === index) {
+            slide.classList.add('active');
+        }
+    });
+}
+
+function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+}
+
+function prevSlide() {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    showSlide(currentSlide);
+}
+
+// Automatically change slides every 5 seconds
+setInterval(nextSlide, 5000);
+</script>
+
+</body>
+</html>

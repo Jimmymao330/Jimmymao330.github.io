@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>關於 T-school</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+.header .logo {
+    display: flex;
+    align-items: center;
+}
+.header .logo img {
+    height: 50px;
+    margin-right: 10px;
+}
+.header .logo-text {
+    font-size: 18px;
+    color: #003366;
+}
+.header .actions {
+    display: flex;
+    align-items: center;
+}
+.header .actions a {
+    margin-left: 10px;
+    text-decoration: none;
+    color: #003366;
+    font-size: 14px;
+}
+.header .social-icons img {
+    height: 30px;
+    margin-left: 10px;
+}
+.header .font-size-buttons button {
+    margin-left: 5px;
+    padding: 5px 10px;
+    background-color: #ddd;
+    border: none;
+    cursor: pointer;
+}
+.navbar {
+    background-color: #6ec1e4;
+    overflow: hidden;
+}
+.navbar a, .navbar .dropbtn {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: inherit;
+}
+.navbar .dropdown {
+    float: left;
+    overflow: hidden;
+}
+.navbar .dropdown .dropbtn {
+    border: none;
+    outline: none;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+}
+.navbar .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    margin-top: 0;
+    top: 115px;
+}
+.navbar .dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    font-size: inherit;
+}
+.navbar .dropdown-content a:hover {
+    background-color: #ddd;
+}
+.navbar .dropdown:hover .dropdown-content {
+    display: block;
+}
+.content {
+    padding: 20px;
+}
+.content h1 {
+    color: #003366;
+}
+.intro-box {
+    background-color: #e0f7fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+.intro-box h2 {
+    color: #00796b;
+}
+.intro-box p {
+    line-height: 1.6;
+    color: #004d40;
+}
+.intro-box img {
+    max-width: 300px;
+    margin-left: 20px;
+    border-radius: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">
+        <img src="logo.png" alt="T-School Logo">
+        <div class="logo-text">
+            <div>臺北市數位實驗高級中等學校</div>
+            <div>Taipei Digital Experimental High School</div>
+        </div>
+    </div>
+    <div class="actions">
+        <a href="index.html">首頁</a>
+        <a href="#login">登入</a>
+        <a href="#guide">導覽</a>
+        <div class="font-size-buttons">
+            <button onclick="setFontSize('small')">小</button>
+            <button onclick="setFontSize('medium')">中</button>
+            <button onclick="setFontSize('large')">大</button>
+        </div>
+        <div class="social-icons">
+            <img src="facebook.png" alt="Facebook">
+            <img src="youtube.png" alt="YouTube">
+            <img src="line.png" alt="LINE">
+        </div>
+    </div>
+</div>
+
+<div class="navbar">
+    <a href="#about">關於 T-school</a>
+    <div class="dropdown">
+        <button class="dropbtn">行政團隊</button>
+        <div class="dropdown-content">
+            <a href="#duties">業務職掌</a>
+            <a href="#structure">組織架構</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">課程介紹</button>
+        <div class="dropdown-content">
+            <a href="#course-introduction">課程介紹</a>
+            <a href="#self-development">自我發展</a>
+            <a href="#culture">文化社會</a>
+            <a href="#knowledge">學科知識</a>
+            <a href="#individual-needs">個別需求</a>
+            <a href="#graduation-project">畢業專題</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">校園公告</button>
+        <div class="dropdown-content">
+            <a href="#announcements">校園公告</a>
+            <a href="#gender-equality">性別平等專區</a>
+            <a href="#disaster-education">防災教育專區</a>
+            <a href="#friendly-campus">友善校園</a>
+            <a href="#international-education">國際教育專區</a>
+            <a href="#quality-school">優質學校專區</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">學生專區</button>
+        <div class="dropdown-content">
+            <a href="#course-selection">課程選課</a>
+            <a href="#file-area">檔案專區</a>
+            <a href="#guidance">輔導資訊</a>
+            <a href="#learning-resources">學習歷程檔案資源站</a>
+            <a href="#digital-platform">數位平臺</a>
+        </div>
+    </div>
+    <a href="#admissions">招生專區</a>
+    <a href="#partners">夥伴招募</a>
+</div>
+
+<div class="content">
+    <h1>關於 T-school</h1>
+    <div class="intro-box">
+        <div style="flex: 1;">
+            <h2>教育理念及願景</h2>
+            <p>臺北市數位實驗高中 T-school 的教育理念核心相信，教育的目的在於幫助每一位學生探索自我，了解周遭的生活環境，並逐步發展能力，以成為可以應變未來生活的獨立個體。也堅信教育能打破時間與空間，凝聚背景互異的年輕人，透過彼此支持、學習，進而勇於行動與領導，加入改變社會的行列。</p>
+            <p>為達成此目標，T-school 透過內省外探、尋找天賦的學習設計，訂立『廣闊探索、天賦自由』作為教育目標，並在數位創新、科技轉型的累積基礎下，融合人文與科技，作為學習主軸，期許培育出具「學習力」、「影響力」、「移動力」的世界公民。並提供各種多元潛能發展的領域選修課程，支持學生成為正向改變世界的生力軍。</p>
+            <p>本校屬於「學校型態實驗教育」，融合數位科技與探究實作，實踐個人化深度學習，並致力為每一位學生量身打造最合適自己的教育模式，幫助學生發揮潛能，促進個人自我實現與社會共榮。</p>
+        </div>
+        <img src="education-concept.png" alt="教育理念圖示">
+    </div>
+    <div class="intro-box">
+        <h2>學校歷史</h2>
+        <p>臺北市數位實驗高級中等學校於2021年由臺北市政府配合實驗教育規劃設立，最初被稱為「第一實驗網路高中」。</p>
+        <p>2022年初，經過公開校名徵選活動，最終定名為「臺北市數位實驗高中」。</p>
+        <p>2022年7月，學校完成首屆招生，並於8月正式成立。</p>
+        <p>最初由籌備處主任陳智源擔任代理校長，2023年由原弘道國中校長賴宏銓擔任首任校長。</p>
+        <p>同年，本校啟用了位於臺北市教育研究發展中心內的吉林基地。</p>
+    </div>
+    <div class="intro-box">
+        <h2>創校緣由</h2>
+        <p>文字</p>
+        <p>文字</p>
+        <p>文字</p>
+        <p>文字</p>
+    </div>
+</div>
+
+<script>
+function setFontSize(size) {
+    let fontSize;
+    switch(size) {
+        case 'small':
+            fontSize = '12px';
+            break;
+        case 'medium':
+            fontSize = '16px';
+            break;
+        case 'large':
+            fontSize = '20px';
+            break;
+    }
+    document.body.style.fontSize = fontSize;
+    const elements = document.querySelectorAll('.navbar a, .navbar .dropbtn, .navbar .dropdown-content a');
+    elements.forEach(element => {
+        element.style.fontSize = fontSize;
+    });
+}
+</script>
+
+</body>
+</html>
