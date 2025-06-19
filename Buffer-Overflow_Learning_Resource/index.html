@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buffer Overflow 教學素材包</title>
+    <link rel="icon" href="icon.ico" type="image/x-icon">
     <!-- Google Fonts: Noto Sans TC -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -168,7 +169,7 @@
                     <div id="history-2" class="inner-tab-content">
                         <h3>莫里斯蠕蟲 (Morris Worm, 1988)</h3>
                         <p>1988年11月2日，康乃爾大學研究生 Robert Tappan Morris 釋放了一隻實驗性的「蠕蟲」程式到當時規模還很小的網際網路上。這隻蠕蟲的傳播方式之一，就是利用了 Unix 系統 `fingerd` 服務中的一個<strong class="emphasis">緩衝區溢位漏洞</strong>。</p>
-                        <p>Morris 精心構造了一個超長的查詢請求，觸發了 `fingerd` 服務的緩衝區溢位，進而覆蓋堆疊上的返回位址，讓伺服器執行蠕蟲自帶的惡意程式碼，從而感染該伺服器並繼續尋找下一個目標。雖然 Morris 的本意並非破壞，但程式的設計缺陷導致蠕蟲失控地快速複製，造成當時約 10% 的網際網路主機癱瘓。</p>
+                        <p>Morris 精心构造了一個超長的查詢請求，觸發了 `fingerd` 服務的緩衝區溢位，進而覆蓋堆疊上的返回位址，讓伺服器執行蠕蟲自帶的惡意程式碼，從而感染該伺服器並繼續尋找下一個目標。雖然 Morris 的本意並非破壞，但程式的設計缺陷導致蠕蟲失控地快速複製，造成當時約 10% 的網際網路主機癱瘓。</p>
                         <p><strong class="keyword" title="史上第一個透過網際網路大規模傳播的電腦蠕蟲">莫里斯蠕蟲</strong>事件是資安史上的里程碑，它首次向世界展示了緩衝區溢位漏洞可以被遠端利用，造成大規模的危害。從此，緩衝區溢位從一個理論上的程式錯誤，變成了駭客與資安專家攻防的焦點。</p>
                     </div>
                     <div id="history-3" class="inner-tab-content">

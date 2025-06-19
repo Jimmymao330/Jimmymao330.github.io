@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 頁面順序，用於上下頁切換
     const pageOrder = [
-        'home-page', 'intro-page', 'types-page', 'usage-page', 
+        'home-page', 'intro-page', 'types-page', 'usage-page',
         'history-page', 'ctf-page', 'writeup-page', 'reading-page'
     ];
     let currentPageIndex = 0;
@@ -44,6 +44,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 函式定義 ---
 
+    /**
+     * 動態調整導覽列高度以匹配當前分頁內容
+     */
+    function adjustNavHeight() {
+        // 如果是首頁或導覽列不可見，則恢復自動高度
+        if (currentPageIndex === 0 || mainNav.offsetParent === null) {
+            mainNav.style.height = 'auto';
+            return;
+        }
+        
+        const activePage = document.querySelector('.page-content.active');
+        if (activePage) {
+            const pageHeight = activePage.offsetHeight;
+            mainNav.style.height = `${pageHeight}px`;
+        }
+    }
+    
     /**
      * 顯示指定的頁面
      * @param {string} pageId - 要顯示的頁面的 ID
@@ -80,6 +97,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 7. 將當前頁面存入 Cookie
             setCookie('lastPage', pageId, 7);
+
+            // 8. 調整導覽列高度 (MODIFIED: 新增呼叫)
+            // 使用 setTimeout 確保內容渲染完成後再計算高度
+            setTimeout(adjustNavHeight, 50); 
         }
     }
     
@@ -128,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (targetContent) {
                         targetContent.classList.add('active');
                     }
+                    setTimeout(adjustNavHeight, 50); // 切換 tab 後也要調整高度
                 });
             });
         });
@@ -141,13 +163,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const navContainer = document.querySelector('#writeup-page .step-navigation');
         if (!contentContainer || !navContainer) return;
         
-        // 清空容器
         contentContainer.innerHTML = '';
         navContainer.innerHTML = '';
 
-        // 生成內容和導航按鈕
         writeupData.forEach((step, index) => {
-            // 內容
             const stepDiv = document.createElement('div');
             stepDiv.id = `step-${index + 1}`;
             stepDiv.classList.add('writeup-step');
@@ -155,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
             stepDiv.innerHTML = `<h3>${step.title}</h3>${step.content}`;
             contentContainer.appendChild(stepDiv);
 
-            // 按鈕
             const stepBtn = document.createElement('button');
             stepBtn.classList.add('step-btn');
             stepBtn.dataset.target = `step-${index + 1}`;
@@ -164,7 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
             navContainer.appendChild(stepBtn);
         });
 
-        // 為按鈕添加事件監聽
         const stepButtons = navContainer.querySelectorAll('.step-btn');
         stepButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -176,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const targetStep = document.getElementById(button.dataset.target);
                 if(targetStep) targetStep.classList.add('active');
+                setTimeout(adjustNavHeight, 50); // 切換步驟後也要調整高度
             });
         });
     }
@@ -239,20 +257,58 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- NEW: 鍵盤事件處理 ---
+    function handleKeydown(event) {
+        // 如果焦點在輸入框等元素上，則不觸發快捷鍵
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA' || event.target.isContentEditable) {
+            return;
+        }
+
+        // 1. 方向鍵換頁
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+            event.preventDefault(); // 防止頁面滾動
+            if (!nextPageBtn.classList.contains('hidden')) {
+                nextPageBtn.click();
+            }
+        } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+            event.preventDefault(); // 防止頁面滾動
+            // 直接使用 prevPageBtn.click() 會被 hidden 屬性擋住，所以手動處理
+            if (currentPageIndex > 0) {
+                prevPageBtn.click();
+            }
+        }
+
+        // 2. 數字鍵切換 Tab
+        if (/^[1-9]$/.test(event.key)) {
+            const activePage = document.querySelector('.page-content.active');
+            if (!activePage) return;
+
+            // 尋找當前頁面內的 tab 按鈕 (可能是 .inner-tab-btn 或 .step-btn)
+            const tabButtons = activePage.querySelectorAll('.inner-tab-btn, .step-btn');
+            if (tabButtons.length > 0) {
+                const tabIndex = parseInt(event.key, 10) - 1; // 轉為 0-based 索引
+                if (tabButtons[tabIndex]) {
+                    event.preventDefault();
+                    tabButtons[tabIndex].click(); // 模擬點擊第 N 個按鈕
+                }
+            }
+        }
+    }
+
     // --- 初始化 ---
     
-    // 初始化內部頁籤
     initializeInnerTabs();
-    
-    // 初始化 CTF 題解頁面
     initializeWriteupPage();
+    
+    // NEW: 監聽鍵盤事件和視窗大小變化
+    document.addEventListener('keydown', handleKeydown);
+    window.addEventListener('resize', adjustNavHeight);
 
-    // 檢查 Cookie 並載入上次停留的頁面，否則顯示首頁
+
     const lastPage = getCookie('lastPage');
     if (lastPage && pageOrder.includes(lastPage)) {
         showPage(lastPage);
     } else {
         showPage('home-page');
     }
-
 });
