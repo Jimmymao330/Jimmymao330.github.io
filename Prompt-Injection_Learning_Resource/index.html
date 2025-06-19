@@ -103,7 +103,8 @@
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             padding: 1rem;
-            align-self: flex-start; /* 讓高度由內容決定 */
+            align-self: flex-start; /* 讓高度由內容決定 (JS會覆蓋此高度) */
+            transition: height 0.3s ease-in-out; /* 新增高度變換動畫 */
         }
         .side-nav ul {
             list-style-type: none;
@@ -403,6 +404,7 @@
             bottom: 4rem;
             right: 4rem;
             display: flex;
+            flex-direction: column; /* MODIFIED: 將排列方向改為垂直 */
             gap: 1rem;
             z-index: 1000;
         }
@@ -469,6 +471,7 @@
                 padding-bottom: 0;
                 background-color: transparent;
                 box-shadow: none;
+                transition: none; /* 手機版不需要高度動畫 */
             }
             .side-nav ul {
                 display: flex;
@@ -679,7 +682,6 @@
             <section id="page-ctf" class="page">
                 <div class="ctf-box">
                     <p>準備好挑戰了嗎？<br>在你的終端機（或 CMD）輸入以下指令，<br>前往 CTF 練習平台開始解題！</p>
-                    <div class="command">docker login</div>
                     <div class="command">docker pull masonzeng/prompt-injection_learning_resource:tsctf_pi_v1</div>
                     <div class="command">docker run masonzeng/prompt-injection_learning_resource:tsctf_pi_v1</div>
                     <p class="note">這是一串指令，輸入後會安裝 Docker 映像檔，<br>開啟後就可以在瀏覽器中開啟挑戰了！</p>
@@ -790,7 +792,6 @@
 
         // --- 函數定義 ---
 
-        // NEW: 新增設置 Cookie 的輔助函數
         /**
          * 設置一個 Cookie
          * @param {string} name Cookie 的名稱
@@ -804,11 +805,9 @@
                 date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
                 expires = "; expires=" + date.toUTCString();
             }
-            // path=/ 確保 Cookie 在整個網站都有效
             document.cookie = name + "=" + (value || "") + expires + "; path=/";
         }
 
-        // NEW: 新增讀取 Cookie 的輔助函數
         /**
          * 根據名稱讀取 Cookie
          * @param {string} name Cookie 的名稱
@@ -826,16 +825,31 @@
         }
 
         /**
+         * 調整導航欄高度以匹配內容高度 (僅在桌面版)
+         */
+        function adjustNavHeight() {
+            // 只在桌面視圖（寬度 > 1024px）執行
+            if (window.innerWidth > 1024) {
+                const activePage = document.querySelector('.page.active');
+                if (activePage && sideNav.style.display !== 'none') {
+                    const contentHeight = activePage.offsetHeight;
+                    sideNav.style.height = `${contentHeight}px`;
+                }
+            } else {
+                // 在平板或手機視圖，恢復自動高度以適應橫向佈局
+                sideNav.style.height = 'auto';
+            }
+        }
+
+        /**
          * 顯示指定ID的頁面，並更新導航狀態
          * @param {string} pageId 要顯示的頁面ID
          */
         function showPage(pageId) {
-            // 確保 pageId 是有效的，如果無效則退回首頁
             if (!pageOrder.includes(pageId)) {
                 pageId = 'page-home';
             }
 
-            // 更新頁面可見性
             pages.forEach(page => {
                 page.classList.toggle('active', page.id === pageId);
                 if (page.id === 'page-ctf' && page.id === pageId) {
@@ -845,7 +859,6 @@
                 }
             });
 
-            // 更新導航欄連結的 active 狀態
             navLinks.forEach(link => {
                 link.classList.toggle('active', link.dataset.page === pageId);
             });
@@ -853,25 +866,26 @@
             const isHomePage = (pageId === 'page-home');
             mainContent.classList.toggle('full-width', isHomePage);
             if (window.innerWidth <= 1024) {
-                 sideNav.style.display = '';
+                 sideNav.style.display = 'flex';
             } else {
                  sideNav.style.display = isHomePage ? 'none' : 'block';
             }
 
             currentPageIndex = pageOrder.indexOf(pageId);
             updateNavButtons();
-
-            // MODIFIED: 在每次切換頁面時，將當前頁面ID存入 Cookie
-            setCookie('lastVisitedPage', pageId, 7); // 儲存7天
-
+            setCookie('lastVisitedPage', pageId, 7);
             window.scrollTo(0, 0);
+
+            // 在切換頁面後，延遲一點時間來調整導航欄高度
+            // 使用 setTimeout 是為了確保瀏覽器完成頁面渲染和高度計算
+            setTimeout(adjustNavHeight, 50);
         }
 
         /**
          * 更新上下頁按鈕的狀態 (啟用/禁用)
          */
         function updateNavButtons() {
-            prevButton.disabled = (currentPageIndex <= 0); // 首頁就禁用
+            prevButton.disabled = (currentPageIndex <= 0);
             nextButton.disabled = (currentPageIndex >= pageOrder.length - 1);
         }
 
@@ -883,8 +897,7 @@
             
             tabGroups.forEach(group => {
                 const buttons = group.querySelectorAll('.tab-button, .step-button');
-                const contents = group.querySelectorAll('.tab-content');
-
+                
                 buttons.forEach(button => {
                     button.addEventListener('click', (e) => {
                         e.preventDefault();
@@ -913,6 +926,8 @@
                  sideNav.style.display = isHomePage ? 'none' : 'block';
                  mainContent.classList.toggle('full-width', isHomePage);
             }
+            // 視窗縮放時也要調整高度
+            adjustNavHeight();
         }
 
         // --- 事件監聽 ---
@@ -945,22 +960,43 @@
         
         window.addEventListener('resize', handleResize);
 
+        /**
+         * 新增鍵盤方向鍵換頁功能
+         */
+        window.addEventListener('keydown', (e) => {
+            // 如果焦點在輸入框內，則不觸發換頁
+            if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            switch (e.key) {
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    e.preventDefault(); // 防止頁面滾動
+                    if (!prevButton.disabled) {
+                        prevButton.click(); // 觸發按鈕點擊，複用現有邏輯
+                    }
+                    break;
+                case 'ArrowRight':
+                case 'ArrowDown':
+                    e.preventDefault(); // 防止頁面滾動
+                    if (!nextButton.disabled) {
+                        nextButton.click(); // 觸發按鈕點擊，複用現有邏輯
+                    }
+                    break;
+            }
+        });
 
         // --- 初始化 ---
-
-        // MODIFIED: 修改了初始化邏輯
-        // 1. 讀取 Cookie
         const lastPage = getCookie('lastVisitedPage');
 
-        // 2. 如果 Cookie 存在且是一個有效頁面，則顯示該頁面
-        //    否則，顯示首頁
         if (lastPage && pageOrder.includes(lastPage)) {
             showPage(lastPage);
         } else {
             showPage('page-home'); 
         }
 
-        initializeTabs(); // 初始化所有頁籤系統
+        initializeTabs();
     });
     </script>
 </body>
