@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        body {
+        html {
             border: 0;
             margin: 0;
             padding: 0;
@@ -20,5 +20,38 @@
 </head>
 <body>
     <iframe src="https://tschool-student-council.notion.site/ebd/1ee9ce94a5ef815ba9a5de8c2d44b223" width="100%" height="100%">
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>100% height test</title>
+  <style>
+    html,body {
+      height: 100%; width: 300px;
+      display: flex;
+      flex-direction: column;
+    }
+    header { height: 20px; background-color: bisque; }
+  </style>
+</head>
+<body>
+    <iframe id="h100" src="https://tschool-student-council.notion.site/ebd/1ee9ce94a5ef815ba9a5de8c2d44b223" width="100%" height="100%">
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>  
+    <script>
+        var debounce;
+        $(window).resize(function() {
+        const el = $('#h100');
+        clearTimeout(debounce);
+        setTimeout(function() {
+            el.height(0)
+            .height(el.parent().height());
+        }, 10);      
+        }).resize();
+    </script>
 </body>
 </html>
