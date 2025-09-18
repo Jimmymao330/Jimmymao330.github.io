@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>數實垃圾大作戰</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <header class="game-header">
+            <h1 class="title">數實垃圾大作戰</h1>
+            <button id="restart-btn" class="restart-button">重新開始</button>
+        </header>
+
+        <main id="game-pages">
+            <!-- 第 1 頁 -->
+            <div class="page active" data-step="1">
+                <div class="page-content">
+                    <p class="mission-text">英雄！地球需要你！</p>
+                    <button class="action-btn">我要丟垃圾</button>
+                </div>
+            </div>
+
+            <!-- 第 2 頁 -->
+            <div class="page" data-step="2">
+                <div class="page-content">
+                    <p class="mission-text">太棒了！回收前要先沖洗，<br>避免細菌滋生喔！</p>
+                    <button class="action-btn">我清洗乾淨了！</button>
+                </div>
+            </div>
+            
+            <!-- 第 3 頁 -->
+            <div class="page" data-step="3">
+                <div class="page-content">
+                    <p class="mission-text">做得很好！撕下瓶身的標籤，<br>有助於回收處理效率！</p>
+                    <button class="action-btn">我把標籤撕下了</button>
+                </div>
+            </div>
+
+            <!-- 第 4 頁 -->
+            <div class="page" data-step="4">
+                 <div class="page-content">
+                    <p class="mission-text mission-complete">任務完成！<br>你真是地球的超級英雄！</p>
+                    <button class="action-btn">準備把垃圾丟進正確的回收桶！</button>
+                </div>
+            </div>
+        </main>
+
+        <footer class="game-footer">
+            <div class="progress-bar-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
