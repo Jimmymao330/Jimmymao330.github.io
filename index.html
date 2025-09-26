@@ -4,8 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maomao</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            /* 確保 body 有一個相對定位，
+               這樣 position: absolute 才會相對於它 */
+            position: relative; 
+        }
+
+        /* 【*** 核心修改 1 ***】
+           使用 position: absolute 將角色和目標相對於整個網頁定位 */
+        #player {
+            position: absolute; /* 關鍵屬性 */
+            width: 25px;
+            height: 25px;
+            background-color: #FF6347; /* Tomato */
+            border-radius: 5px;
+            user-select: none;
+            z-index: 10;
+        }
+
+        #player::before, #player::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            width: 5px;
+            height: 5px;
+            background-color: white;
+            border-radius: 50%;
+        }
+
+        #player::before { left: 5px; }
+        #player::after { right: 5px; }
+
+        #target {
+            position: absolute; /* 關鍵屬性 */
+            font-size: 25px;
+            user-select: none;
+            color: #FFD700; /* Gold */
+            text-shadow: 0 0 5px rgb(255, 255, 255);
+            z-index: 9;
+        }
+    </style>
 </head>
 <body>
+    <!-- 彩帶動畫函式庫 -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- 網頁內容 -->
     <h1>Maomao 毛毛</h1>
     <p>這真是一個美麗的網頁</p>
     <br>
@@ -48,11 +94,94 @@
         中華民國童軍 童軍中級合格<br>
         中華民國童軍 六項專科章合格
     </p>
-
     <h3>更多連結</h3>
     <h5>什麼是童軍？<a href="https://scout.org.tw">中華民國童軍總會官網</a></h5>
     <h5>什麼是童軍？<a href="https://scout.org">世界童軍運動組織（WOSM）官網</a></h5>
     <h5>什麼是數位實驗高中？<a href="https://tschool.tp.edu.tw">臺北市數位實驗高級中等學校官網</a></h5>
     <h5>臺北市數位實驗高中的學生自治會？<a href="https://tschool-students.github.io">臺北市數位實驗高級中等學校學生自治會官網</a></h5>
+    <div style="height: 1000px;"></div> <!-- 增加一個長空白，方便測試滾動效果 -->
+
+    <!-- 遊戲元素 -->
+    <div id="player"></div>
+    <div id="target">★</div>
+
+    <script>
+        const player = document.getElementById('player');
+        const target = document.getElementById('target');
+        
+        let playerX = 50, playerY = 50;
+        const moveSpeed = 5;
+
+        // 【*** 核心修改 2 ***】
+        // keys 物件中不再包含空白鍵 ' '
+        const keys = {
+            ArrowRight: false,
+            ArrowLeft: false,
+            ArrowUp: false,
+            ArrowDown: false
+        };
+
+        function moveTarget() {
+            // 【*** 核心修改 3 ***】
+            // 使用整個文檔的可滾動寬高來生成目標，而不是僅限於可見視窗
+            const maxX = document.body.scrollWidth - target.offsetWidth;
+            const maxY = document.body.scrollHeight - target.offsetHeight;
+            const newX = Math.random() * maxX;
+            const newY = Math.random() * maxY;
+            target.style.left = `${newX}px`;
+            target.style.top = `${newY}px`;
+        }
+        
+        function gameLoop() {
+            // 1. 根據按鍵直接修改座標
+            if (keys.ArrowUp) playerY -= moveSpeed;
+            if (keys.ArrowDown) playerY += moveSpeed;
+            if (keys.ArrowLeft) playerX -= moveSpeed;
+            if (keys.ArrowRight) playerX += moveSpeed;
+
+            // 2. 整個文檔的邊界處理
+            if (playerX < 0) playerX = 0;
+            if (playerY < 0) playerY = 0;
+            // 同樣使用整個文檔的寬高作為邊界
+            if (playerX + player.offsetWidth > document.body.scrollWidth) {
+                playerX = document.body.scrollWidth - player.offsetWidth;
+            }
+            if (playerY + player.offsetHeight > document.body.scrollHeight) {
+                playerY = document.body.scrollHeight - player.offsetHeight;
+            }
+            
+            // 3. 渲染與檢查目標
+            player.style.left = `${playerX}px`;
+            player.style.top = `${playerY}px`;
+            checkTargetCollision();
+
+            requestAnimationFrame(gameLoop);
+        }
+        
+        function checkTargetCollision() {
+            const playerRect = player.getBoundingClientRect();
+            const targetRect = target.getBoundingClientRect();
+            if (
+                playerRect.left < targetRect.right &&
+                playerRect.right > targetRect.left &&
+                playerRect.top < targetRect.bottom &&
+                playerRect.bottom > targetRect.top
+            ) {
+                const originX = (targetRect.left + targetRect.width / 2) / window.innerWidth;
+                const originY = (targetRect.top + targetRect.height / 2) / window.innerHeight;
+                confetti({ particleCount: 100, spread: 70, origin: { x: originX, y: originY } });
+                moveTarget();
+            }
+        }
+
+        function init() {
+            moveTarget();
+            document.addEventListener('keydown', e => { if (e.key in keys) { e.preventDefault(); keys[e.key] = true; } });
+            document.addEventListener('keyup', e => { if (e.key in keys) { e.preventDefault(); keys[e.key] = false; } });
+            gameLoop();
+        }
+
+        init();
+    </script>
 </body>
 </html>
