@@ -1,187 +1,454 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maomao</title>
+    <title>Maomao's Website</title>
+    <!-- 彩帶動畫函式庫 -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- 引入思源黑體 (Noto Sans TC) 以提升中文字型質感 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500&family=Inter:wght@400;600&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    
+    <meta name="description" content="毛宇禾的個人網站">
+    
+    <meta name="keywords" content="毛宇禾,宇禾,臺北市數位實驗高中,數位實驗高中,臺北市數位實中,數位實中,數實">
+    <meta name="author" content="毛宇禾">
+    
+    <!-- Open Graph (OG) 標籤 (讓網頁在社群媒體分享時有更好的預覽效果) -->
+    <meta property="og:title" content="毛宇禾的個人網站">
+    <meta property="og:description" content="這是毛宇禾的個人網站！">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jimmymao330.github.io/">
+    <meta property="og:site_name" content="毛宇禾的個人網站" />
+    
+    <!-- Twitter Card 標籤 (讓網頁在 Twitter 分享時有更好的預覽效果) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="毛宇禾的個人網站">
+    <meta name="twitter:description" content="這是毛宇禾的個人網站！">
+
     <style>
+        :root {
+            --primary-glow-color: #00ffff;
+            --secondary-glow-color: #ffa200;
+            --background-color: #0d0c22;
+            --card-background: rgba(20, 18, 50, 0.7); /* 加深一點以增強對比 */
+            --text-color: #e0e0e0;
+            --header-color: #ffffff;
+            /* 【優化 1】定義一個更專業、平滑的動畫曲線 */
+            --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* --- 基礎與動態背景設定 --- */
+        html { scroll-behavior: smooth; }
         body {
-            font-family: sans-serif;
-            /* 確保 body 有一個相對定位，
-               這樣 position: absolute 才會相對於它 */
-            position: relative; 
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        #particle-canvas {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; z-index: -1;
         }
 
-        /* 【*** 核心修改 1 ***】
-           使用 position: absolute 將角色和目標相對於整個網頁定位 */
-        #player {
-            position: absolute; /* 關鍵屬性 */
-            width: 25px;
-            height: 25px;
-            background-color: #FF6347; /* Tomato */
+        /* --- HUD 抬頭顯示器 & 主要標題 --- */
+        .hud-header {
+            position: fixed; top: 20px; left: 20px; z-index: 100;
+            border: 1px solid var(--primary-glow-color);
+            padding: 10px 20px;
+            background: rgba(0, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
             border-radius: 5px;
-            user-select: none;
-            z-index: 10;
+            transition: box-shadow 0.4s var(--ease-out-quint);
+            /* 【優化 3】加入細微的懸浮動畫 */
+            animation: subtle-float 4s ease-in-out infinite;
+        }
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+        .hud-header:hover {
+             box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+        .hud-header h1 {
+            margin: 0; color: var(--header-color);
+            font-family: 'Fira Code', monospace; font-size: 1.5rem;
+            text-shadow: 0 0 5px var(--primary-glow-color);
         }
 
-        #player::before, #player::after {
-            content: '';
-            position: absolute;
-            top: 6px;
-            width: 5px;
-            height: 5px;
-            background-color: white;
-            border-radius: 50%;
+        .main-title-container {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center; padding: 20px;
+        }
+        .main-title-container h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-family: 'Noto Sans TC', 'Fira Code', monospace;
+            font-weight: 700;
+            color: var(--header-color); margin: 0;
+            text-shadow: 0 0 15px var(--primary-glow-color), 0 0 25px var(--primary-glow-color);
+            animation: fadeInText 2s var(--ease-out-quint);
+        }
+        @keyframes fadeInText { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .main-title-container p {
+            font-size: 1.2rem; color: var(--primary-glow-color);
+            animation: fadeInText 2s var(--ease-out-quint) 0.5s;
+            animation-fill-mode: backwards;
+        }
+        .scroll-down-indicator {
+            position: absolute; bottom: 30px; font-size: 0.8rem; letter-spacing: 2px;
+            animation: bounce 2s ease-in-out infinite;
+            text-shadow: 0 0 8px var(--primary-glow-color);
+        }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
+
+        /* --- 玻璃擬態內容卡片 --- */
+        .content-container { position: relative; z-index: 1; }
+        .content-card {
+            max-width: 900px; margin: 10vh auto; padding: 40px;
+            background: var(--card-background);
+            border: 1px solid var(--primary-glow-color);
+            border-radius: 15px; backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            opacity: 0; transform: translateY(30px);
+            /* 【優化 1】使用新的動畫曲線 */
+            transition: opacity 0.8s var(--ease-out-quint), transform 0.8s var(--ease-out-quint), box-shadow 0.5s var(--ease-out-quint);
+        }
+        .content-card.visible { opacity: 1; transform: translateY(0); }
+        .content-card:hover {
+            box-shadow: 0 0 35px rgba(0, 255, 255, 0.4);
+            transform: translateY(-5px);
+        }
+        .content-card h2 {
+            font-family: 'Fira Code', monospace; font-size: 2rem;
+            color: var(--primary-glow-color); border-bottom: 2px solid;
+            padding-bottom: 10px; margin-top: 0;
+        }
+        .content-card a {
+            color: var(--primary-glow-color); text-decoration: none;
+            font-weight: bold; transition: text-shadow 0.3s var(--ease-out-quint), color 0.3s var(--ease-out-quint);
+        }
+        .content-card a:hover { text-shadow: 0 0 10px var(--primary-glow-color); color: white; }
+        .content-card ul { list-style-type: none; padding-left: 0; }
+        .content-card li {
+            padding: 5px 0 5px 20px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M0 5 L5 10 L10 5 L5 0 Z' fill='%2300ffff'/%3E%3C/svg%3E") no-repeat left center;
+        }
+        .content-card p { margin-bottom: 1.5em; }
+        .content-card p:last-child { margin-bottom: 0; }
+
+        .content-card b {
+            color: var(--secondary-glow-color);
+            font-family: 'Fira Code', monospace;
+            text-shadow: 0 0 8px rgba(255, 162, 0, 0.7);
+            font-weight: bold;
         }
 
-        #player::before { left: 5px; }
-        #player::after { right: 5px; }
+        #typing-text {
+            color: var(--secondary-glow-color);
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(255, 162, 0, 0.7);
+        }
+        #typing-text::after {
+            content: '|';
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
 
+        /* --- 照片藝廊升級 --- */
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .gallery-item {
+            position: relative; overflow: hidden; border-radius: 10px;
+            border: 1px solid var(--primary-glow-color);
+            transition: transform 0.4s var(--ease-out-quint);
+        }
+        .gallery-item:hover { transform: scale(1.05); }
+        .gallery-item img {
+            width: 100%; height: 200px;
+            object-fit: cover; display: block;
+        }
+        .gallery-item::after {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(13, 12, 34, 0.8), transparent);
+            opacity: 0; transition: opacity 0.4s var(--ease-out-quint);
+        }
+        .gallery-item::before {
+            content: attr(data-title);
+            position: absolute; bottom: 15px; left: 15px;
+            color: white; font-size: 0.9rem; font-weight: bold;
+            opacity: 0; transform: translateY(10px);
+            transition: opacity 0.4s var(--ease-out-quint), transform 0.4s var(--ease-out-quint);
+            z-index: 2;
+        }
+        .gallery-item:hover::after, .gallery-item:hover::before {
+            opacity: 1; transform: translateY(0);
+        }
+        
+        /* --- 摺疊功能 (Accordion) 樣式 --- */
+        #resume h3 {
+            cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; user-select: none;
+            transition: color 0.3s var(--ease-out-quint);
+        }
+        #resume h3:hover { color: var(--primary-glow-color); }
+        #resume h3::after {
+            content: '+'; font-size: 2.5rem; font-weight: lighter;
+            color: var(--primary-glow-color);
+            /* 【優化 1】使用新的動畫曲線 */
+            transition: transform 0.5s var(--ease-out-quint);
+        }
+        #resume h3.active::after { transform: rotate(45deg); }
+        #resume ul {
+            max-height: 0; overflow: hidden;
+            /* 【優化 1】使用新的動畫曲線 */
+            transition: max-height 0.6s var(--ease-out-quint), margin-top 0.6s var(--ease-out-quint);
+            margin-top: 0; padding-left: 0; list-style: none;
+        }
+        
+        /* --- 遊戲元素 (霓虹風格) --- */
+        #player, #target { position: absolute; user-select: none; }
+        #player {
+            width: 25px; height: 25px; background-color: #FF6347;
+            border-radius: 3px; z-index: 10;
+            box-shadow: 0 0 10px #FF6347, 0 0 15px #FF6347;
+        }
         #target {
-            position: absolute; /* 關鍵屬性 */
-            font-size: 25px;
-            user-select: none;
-            color: #FFD700; /* Gold */
-            text-shadow: 0 0 5px rgb(255, 255, 255);
-            z-index: 9;
+            font-size: 30px; color: #FFD700; z-index: 9;
+            text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700;
+            animation: pulse 1.5s infinite;
         }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
-    <!-- 彩帶動畫函式庫 -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-    <!-- 網頁內容 -->
-    <h1>Maomao 毛毛</h1>
-    <p>這真是一個美麗的網頁</p>
-    <br>
-    <h3>關於我的連結</h3>
-    <h5>E-mail: <a href="mailto:jimmymao330@gmail.com">jimmymao330@gmail.com</a></h5>
-    <h5>Discord: <a href="https://discordapp.com/users/907971087650922526">@jimmymao330</a></h5>
-    <h5>GitHub: <a href="https://github.com/Jimmymao330">https://github.com/Jimmymao330</a></h5>
-    <br>
-    <h3>預約時間</h3>
-    <h5><a href="https://calendar.app.google/2fv8zZDDTzWwQRqQ9">預約秘書部部長洽談時間</a>（臺北市數位實驗高級中等學校學生自治會秘書部）</h5>
-    <br>
-    <h3>我的簡歷</h3>
-    <p>
-        <b>現職：</b><br>
-        臺北市數位實驗高級中等學校學生自治會 秘書部部長<br>
-        臺北市數位實驗高級中等學校創客社 社長<br>
-        臺北市數位實驗高級中等學校資訊研究社 教學<br>
-        臺北市數位實驗高級中等學校羽球社 文書<br>
-        臺北市數位實驗高級中等學校學生自治會 選舉罷免執行委員會 委員<br>
-        臺北市數位實驗高級中等學校 社團評鑑委員會 社團代表<br>
-        <br>
-        <b>經歷：</b><br>
-        曾獲新北市108學年度中小學科學展覽會國小組生物科優等暨團隊合作獎<br>
-        曾獲新北市109學年度中小學科學展覽會國小組化學科甲等<br>
-        曾獲臺北市第56屆中小學科學展覽會國中組生活與應用科學（二）科特優<br>
-        曾獲中華民國第63屆中小學科學展覽會國中組生活與應用科學（二）科第二名<br>
-        曾獲 2025 IEYI 世界青少年發明展台灣選拔賽高中職組便利生活類金牌<br>
-        曾獲 International Exhibition for Young Inventors (IEYI) 2025, Sliver Award (Convenience, Senior)<br>
-        曾獲中華民國童軍109年優秀童軍獎章<br>
-        曾獲臺北市數位實驗高級中等學校113學年度優良學生
-        <br>
-        曾任臺北市數位實驗高級中等學校學生自治會行政部（現改組為秘書部）部員［113］<br>
-        曾任臺北市立實踐國民中學 學生代表（校務會議、午餐會議、獎懲委員會、服儀委員會等）［110-111］<br>
-        曾任中華民國童軍臺北市第211團 聯隊長［112］<br>
-        曾於中華民國童軍臺北市第211團擔任小隊長［110-111］<br>
-        曾於童軍露營活動擔任多次隊輔與工作人員
-        <br>
-        APCS 3 2<br>
-        Yamaha Grade Examination Piano Grade 6<br>
-        中華民國童軍 童軍中級合格<br>
-        中華民國童軍 六項專科章合格
-    </p>
-    <h3>更多連結</h3>
-    <h5>什麼是童軍？<a href="https://scout.org.tw">中華民國童軍總會官網</a></h5>
-    <h5>什麼是童軍？<a href="https://scout.org">世界童軍運動組織（WOSM）官網</a></h5>
-    <h5>什麼是數位實驗高中？<a href="https://tschool.tp.edu.tw">臺北市數位實驗高級中等學校官網</a></h5>
-    <h5>臺北市數位實驗高中的學生自治會？<a href="https://tschool-students.github.io">臺北市數位實驗高級中等學校學生自治會官網</a></h5>
-    <div style="height: 1000px;"></div> <!-- 增加一個長空白，方便測試滾動效果 -->
+    <canvas id="particle-canvas"></canvas>
 
-    <!-- 遊戲元素 -->
+    <header class="hud-header">
+        <h1>Maomao's Website</h1>
+    </header>
+
+    <main>
+        <div class="main-title-container">
+            <h1>嗨！我是毛宇禾</h1>
+            <p>Hi, I am Maomao</p>
+            <div class="scroll-down-indicator">SCROLL TO EXPLORE ▼</div>
+        </div>
+
+        <div class="content-container">
+            <section id="about" class="content-card">
+                <h2>> All About Me</h2>
+                <p>我是來自臺北市數位實驗高級中等學校的宇禾，一個 <span id="typing-text"></span>。</p>
+                <p>我是個 <b>科學人</b>。從小，我就深深為科學著迷。從國小五年級至今，我總共參與了4次科展。雖然未來升學沒有要朝科學領域發展，但這些經歷帶領著我在理科領域的探索，也培養出為人處事上的理性思維。</p>
+                <p>我是個 <b>資訊人</b>。國小時，因著父親在家中製作自動澆水系統，開始好奇那些從網路上複製而來的程式。從C++到Python，我漸漸喜歡上這些程式語言與資訊技術。因著再資訊領域的學習，我掌握了善用科技工具解決問題的能力。</p>
+                <p>我是個 <b>童軍</b>。十年來，不曾停歇地參與童軍活動。在團集會中練習童軍技能、在露營活動中學習小隊精神、在全國大露營中和不同縣市、國家的童軍夥伴交流⋯⋯。童軍銘言第二條：「人生以服務為目的」，推進著我多次參與社會服務與環境保護相關活動，也讓我能夠以服務者的角度，參與身邊的各種議題。</p>
+                <p>現在，我還是個 <b>議題關注者</b>。國中時對於議題認識的萌芽，使我在高中接觸到學生自治、校訂必修議題相關課程時，開始研究各種議題，舉凡國家政治、國際關係、環境議題與教育議題等。我並不像個「正宗」的議題工作者，長期參與社會倡議、權益爭取，我開始接觸議題的時間很晚，也並沒有這麼豐富的經驗，但我喜歡也擅長透過理性析、換位思考的方式，理解現況，並思考解方或訴求。我相信，這多年來的學習路程，能夠使我對議題產生不一樣的看法，及與他人不同的關注或參與方式。</p>
+                
+                <h3>聯繫方式</h3>
+                <ul>
+                    <li>E-mail: <a href="mailto:jimmymao330@gmail.com">jimmymao330@gmail.com</a></li>
+                    <li>Discord: <a href="https://discordapp.com/users/907971087650922526">@jimmymao330</a></li>
+                    <li>GitHub: <a href="https://github.com/Jimmymao330">https://github.com/Jimmymao330</a></li>
+                </ul>
+            </section>
+
+            <section id="resume" class="content-card">
+                <h2>> Resume</h2>
+                <h3>現職</h3>
+                <ul>
+                    <li>臺北市數位實驗高級中等學校學生自治會 秘書部部長</li>
+                    <li>臺北市數位實驗高級中等學校創客社 社長</li>
+                    <li>臺北市數位實驗高級中等學校資訊研究社 教學</li>
+                    <li>臺北市數位實驗高級中等學校羽球社 文書</li>
+                    <li>臺北市數位實驗高級中等學校學生自治會 選舉罷免執行委員會 委員</li>
+                    <li>臺北市數位實驗高級中等學校 社團評鑑委員會 社團代表</li>
+                </ul>
+                <h3>經歷</h3>
+                <ul>
+                    <li>曾獲新北市108學年度中小學科學展覽會國小組生物科優等暨團隊合作獎</li>
+                    <li>曾獲新北市109學年度中小學科學展覽會國小組化學科甲等</li>
+                    <li>曾獲臺北市第56屆中小學科學展覽會國中組生活與應用科學（二）科特優</li>
+                    <li>曾獲中華民國第63屆中小學科學展覽會國中組生活與應用科學（二）科第二名</li>
+                    <li>曾獲 2025 IEYI 世界青少年發明展台灣選拔賽高中職組便利生活類金牌</li>
+                    <li>曾獲 International Exhibition for Young Inventors (IEYI) 2025, Sliver Award (Convenience, Senior)</li>
+                    <li>曾獲中華民國童軍109年優秀童軍獎章</li>
+                    <li>曾獲臺北市數位實驗高級中等學校113學年度優良學生</li>
+                    <li>曾任臺北市數位實驗高級中等學校學生自治會行政部（現改組為秘書部）部員［113］</li>
+                    <li>曾任臺北市立實踐國民中學 學生代表（校務會議、午餐會議、獎懲委員會、服儀委員會等）［110-111］</li>
+                    <li>曾任中華民國童軍臺北市第211團 聯隊長［112］</li>
+                    <li>曾於中華民國童軍臺北市第211團擔任小隊長［110-111］</li>
+                    <li>曾任新北市114年度文山、七星分區幼童軍聯團活動活動組組員</li>
+                    <li>曾於童軍露營活動擔任多次隊輔與工作人員</li>
+                </ul>
+                <h3>技能與認證</h3>
+                <ul>
+                    <li>APCS 3 2</li>
+                    <li>Yamaha Grade Examination Piano Grade 6</li>
+                    <li>中華民國童軍 童軍中級合格</li>
+                    <li>中華民國童軍 六項專科章合格</li>
+                </ul>
+            </section>
+
+            <section id="gallery" class="content-card">
+                <h2>> Gallery</h2>
+                <div class="gallery">
+                    <div class="gallery-item" data-title=""><img src="" alt=""></div>
+                    <div class="gallery-item" data-title=""><img src="" alt=""></div>
+                    <div class="gallery-item" data-title=""><img src="" alt=""></div>
+                    <div class="gallery-item" data-title=""><img src="" alt=""></div>
+                </div>
+            </section>
+
+            <section id="more-info" class="content-card">
+                <h2>> More Info</h2>
+                <ul>
+                    <li>中華民國童軍？<a href="https://www.scout.org.tw" target="_blank">www.scout.org.tw</a></li>
+                    <li>世界童軍運動？ <a href="https://www.scout.org" target="_blank">www.scout.org</a></li>
+                    <li>數位實驗高中？<a href="https://tschool.tp.edu.tw" target="_blank">tschool.tp.edu.tw</a></li>
+                    <li>數位實中學生會？<a href="https://tschool-students.github.io" target="_blank">tschool-students.github.io</a></li>
+                </ul>
+            </section>
+        </div>
+    </main>
+    
     <div id="player"></div>
-    <div id="target">★</div>
+    <div id="target">✦</div>
 
     <script>
-        const player = document.getElementById('player');
-        const target = document.getElementById('target');
-        
-        let playerX = 50, playerY = 50;
-        const moveSpeed = 5;
+    /* --- 【優化 2】升級後的動態粒子背景 SCRIPT --- */
+    const canvas = document.getElementById('particle-canvas'); 
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; 
+    canvas.height = window.innerHeight;
+    let particlesArray;
 
-        // 【*** 核心修改 2 ***】
-        // keys 物件中不再包含空白鍵 ' '
-        const keys = {
-            ArrowRight: false,
-            ArrowLeft: false,
-            ArrowUp: false,
-            ArrowDown: false
-        };
+    // 追蹤滑鼠位置
+    const mouse = {
+        x: null,
+        y: null,
+        radius: (canvas.height / 120) * (canvas.width / 120) // 影響範圍
+    };
 
-        function moveTarget() {
-            // 【*** 核心修改 3 ***】
-            // 使用整個文檔的可滾動寬高來生成目標，而不是僅限於可見視窗
-            const maxX = document.body.scrollWidth - target.offsetWidth;
-            const maxY = document.body.scrollHeight - target.offsetHeight;
-            const newX = Math.random() * maxX;
-            const newY = Math.random() * maxY;
-            target.style.left = `${newX}px`;
-            target.style.top = `${newY}px`;
-        }
-        
-        function gameLoop() {
-            // 1. 根據按鍵直接修改座標
-            if (keys.ArrowUp) playerY -= moveSpeed;
-            if (keys.ArrowDown) playerY += moveSpeed;
-            if (keys.ArrowLeft) playerX -= moveSpeed;
-            if (keys.ArrowRight) playerX += moveSpeed;
+    window.addEventListener('mousemove', event => {
+        mouse.x = event.x;
+        mouse.y = event.y;
+    });
 
-            // 2. 整個文檔的邊界處理
-            if (playerX < 0) playerX = 0;
-            if (playerY < 0) playerY = 0;
-            // 同樣使用整個文檔的寬高作為邊界
-            if (playerX + player.offsetWidth > document.body.scrollWidth) {
-                playerX = document.body.scrollWidth - player.offsetWidth;
+    class Particle { 
+        constructor(x, y, dX, dY, s, c) { 
+            this.x = x; this.y = y; this.directionX = dX; this.directionY = dY; 
+            this.size = s; this.color = c; 
+        } 
+        draw() { 
+            ctx.beginPath(); 
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false); 
+            ctx.fillStyle = 'rgba(0, 255, 255, 0.5)'; 
+            ctx.fill(); 
+        } 
+        update() { 
+            if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX; 
+            if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY; 
+
+            // 計算粒子與滑鼠的距離
+            let dx = mouse.x - this.x;
+            let dy = mouse.y - this.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            // 如果在影響範圍內，就推開粒子
+            if (distance < mouse.radius + this.size) {
+                if (mouse.x < this.x && this.x < canvas.width - this.size * 10) this.x += 1;
+                if (mouse.x > this.x && this.x > this.size * 10) this.x -= 1;
+                if (mouse.y < this.y && this.y < canvas.height - this.size * 10) this.y += 1;
+                if (mouse.y > this.y && this.y > this.size * 10) this.y -= 1;
             }
-            if (playerY + player.offsetHeight > document.body.scrollHeight) {
-                playerY = document.body.scrollHeight - player.offsetHeight;
-            }
-            
-            // 3. 渲染與檢查目標
-            player.style.left = `${playerX}px`;
-            player.style.top = `${playerY}px`;
-            checkTargetCollision();
 
-            requestAnimationFrame(gameLoop);
-        }
-        
-        function checkTargetCollision() {
-            const playerRect = player.getBoundingClientRect();
-            const targetRect = target.getBoundingClientRect();
-            if (
-                playerRect.left < targetRect.right &&
-                playerRect.right > targetRect.left &&
-                playerRect.top < targetRect.bottom &&
-                playerRect.bottom > targetRect.top
-            ) {
-                const originX = (targetRect.left + targetRect.width / 2) / window.innerWidth;
-                const originY = (targetRect.top + targetRect.height / 2) / window.innerHeight;
-                confetti({ particleCount: 100, spread: 70, origin: { x: originX, y: originY } });
-                moveTarget();
-            }
-        }
+            this.x += this.directionX; 
+            this.y += this.directionY; 
+            this.draw(); 
+        } 
+    }
+    
+    function initParticles() { 
+        particlesArray = []; 
+        let n = (canvas.height * canvas.width) / 9000; 
+        for (let i = 0; i < n; i++) { 
+            let s = (Math.random() * 2) + 1; 
+            let x = (Math.random() * ((innerWidth - s * 2) - (s * 2)) + s * 2); 
+            let y = (Math.random() * ((innerHeight - s * 2) - (s * 2)) + s * 2); 
+            let dX = (Math.random() * .4) - .2; 
+            let dY = (Math.random() * .4) - .2; 
+            particlesArray.push(new Particle(x, y, dX, dY, s, '#00ffff')); 
+        } 
+    }
 
-        function init() {
-            moveTarget();
-            document.addEventListener('keydown', e => { if (e.key in keys) { e.preventDefault(); keys[e.key] = true; } });
-            document.addEventListener('keyup', e => { if (e.key in keys) { e.preventDefault(); keys[e.key] = false; } });
-            gameLoop();
-        }
+    function animateParticles() { 
+        requestAnimationFrame(animateParticles); 
+        ctx.clearRect(0, 0, innerWidth, innerHeight); 
+        for (let i = 0; i < particlesArray.length; i++) particlesArray[i].update(); 
+    }
+    
+    window.addEventListener('resize', () => { 
+        canvas.width = innerWidth; canvas.height = innerHeight; 
+        mouse.radius = (canvas.height / 120) * (canvas.width / 120);
+        initParticles(); 
+    });
+    
+    initParticles(); 
+    animateParticles();
 
-        init();
+    // --- 滾動觸發動畫 SCRIPT (無修改) ---
+    const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } }); }, { threshold: 0.2 });
+    const cards = document.querySelectorAll('.content-card');
+    cards.forEach(card => observer.observe(card));
+
+    // --- 動態打字機效果 SCRIPT (無修改) ---
+    const typingTextElement = document.getElementById('typing-text');
+    const wordsToType = ["科學人", "資訊人", "童軍", "議題關注者", "創造者"];
+    let wordIndex = 0; let charIndex = 0; let isDeleting = false;
+    function typeEffect() { const currentWord = wordsToType[wordIndex]; let displayText = isDeleting ? currentWord.substring(0, charIndex - 1) : currentWord.substring(0, charIndex + 1); typingTextElement.textContent = displayText; isDeleting ? charIndex-- : charIndex++; if (!isDeleting && charIndex === currentWord.length) { isDeleting = true; setTimeout(typeEffect, 1500); } else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % wordsToType.length; setTimeout(typeEffect, 500); } else { const typingSpeed = isDeleting ? 100 : 200; setTimeout(typeEffect, typingSpeed); } }
+    document.addEventListener('DOMContentLoaded', typeEffect);
+
+    // --- 摺疊功能 (Accordion) SCRIPT (無修改) ---
+    const accordions = document.querySelectorAll('#resume h3');
+    accordions.forEach(accordion => {
+        accordion.addEventListener('click', () => {
+            accordion.classList.toggle('active');
+            const panel = accordion.nextElementSibling;
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null;
+                panel.style.marginTop = '0';
+            } else {
+                panel.style.maxHeight = panel.scrollHeight + "px";
+                panel.style.marginTop = '1.5em';
+            } 
+        });
+    });
+    
+    // --- 遊戲 SCRIPT ---
+    const player = document.getElementById('player'); const target = document.getElementById('target');
+    let playerX = 50, playerY = 50; const moveSpeed = 5;
+    const keys = { ArrowRight: false, ArrowLeft: false, ArrowUp: false, ArrowDown: false };
+    function moveTarget() { const maxX = document.body.scrollWidth - target.offsetWidth; const maxY = document.body.scrollHeight - target.offsetHeight; const newX = Math.random() * maxX; const newY = Math.random() * maxY; target.style.left = `${newX}px`; target.style.top = `${newY}px`; }
+    function gameLoop() { 
+        if (keys.ArrowUp) playerY -= moveSpeed; if (keys.ArrowDown) playerY += moveSpeed; 
+        if (keys.ArrowLeft) playerX -= moveSpeed; if (keys.ArrowRight) playerX += moveSpeed; 
+        if (playerX < 0) playerX = 0; if (playerY < 0) playerY = 0; 
+        if (playerX + player.offsetWidth > document.body.scrollWidth) playerX = document.body.scrollWidth - player.offsetWidth; 
+        if (playerY + player.offsetHeight > document.body.scrollHeight) playerY = document.body.scrollHeight - player.offsetHeight; 
+        player.style.left = `${playerX}px`; 
+        /* 【優化 3】修正了變數名稱的錯誤 (py -> playerY) */
+        player.style.top = `${playerY}px`; 
+        checkTargetCollision(); requestAnimationFrame(gameLoop); 
+    }
+    function checkTargetCollision() { const playerRect = player.getBoundingClientRect(); const targetRect = target.getBoundingClientRect(); if (playerRect.left < targetRect.right && playerRect.right > targetRect.left && playerRect.top < targetRect.bottom && playerRect.bottom > targetRect.top) { const originX = (targetRect.left + targetRect.width / 2) / window.innerWidth; const originY = (targetRect.top + targetRect.height / 2) / window.innerHeight; confetti({ particleCount: 200, spread: 90, origin: { x: originX, y: originY }, colors: ['#00ffff', '#FF6347', '#FFD700', '#ffffff'] }); moveTarget(); } }
+    function initGame() { moveTarget(); document.addEventListener('keydown', e => { if (e.key in keys) { e.preventDefault(); keys[e.key] = true; } }); document.addEventListener('keyup', e => { if (e.key in keys) { e.preventDefault(); keys[e.key] = false; } }); gameLoop(); }
+    initGame();
     </script>
 </body>
 </html>
