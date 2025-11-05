@@ -192,20 +192,20 @@
         }
         
         /* --- 摺疊功能 (Accordion) 樣式 --- */
-        #resume h3 {
+        h3.accordion {
             cursor: pointer; display: flex; justify-content: space-between;
             align-items: center; user-select: none;
             transition: color 0.3s var(--ease-out-quint);
         }
-        #resume h3:hover { color: var(--primary-glow-color); }
-        #resume h3::after {
+        h3.accordion:hover { color: var(--primary-glow-color); }
+        h3.accordion::after {
             content: '+'; font-size: 2.5rem; font-weight: lighter;
             color: var(--primary-glow-color);
             /* 【優化 1】使用新的動畫曲線 */
             transition: transform 0.5s var(--ease-out-quint);
         }
-        #resume h3.active::after { transform: rotate(45deg); }
-        #resume ul {
+        h3.accordion.active::after { transform: rotate(45deg); }
+        ul.accordion {
             max-height: 0; overflow: hidden;
             /* 【優化 1】使用新的動畫曲線 */
             transition: max-height 0.6s var(--ease-out-quint), margin-top 0.6s var(--ease-out-quint);
@@ -270,8 +270,8 @@
                     <li>臺北市數位實驗高級中等學校學生自治會 選舉罷免執行委員會 委員</li>
                     <li>臺北市數位實驗高級中等學校 社團評鑑委員會 社團代表</li>
                 </ul>
-                <h3>經歷</h3>
-                <ul>
+                <h3 class="accordion">經歷</h3>
+                <ul class="accordion">
                     <li>曾獲新北市108學年度中小學科學展覽會國小組生物科優等暨團隊合作獎</li>
                     <li>曾獲新北市109學年度中小學科學展覽會國小組化學科甲等</li>
                     <li>曾獲臺北市第56屆中小學科學展覽會國中組生活與應用科學（二）科特優</li>
@@ -287,8 +287,8 @@
                     <li>曾任新北市114年度文山、七星分區幼童軍聯團活動活動組組員</li>
                     <li>曾於童軍露營活動擔任多次隊輔與工作人員</li>
                 </ul>
-                <h3>技能與認證</h3>
-                <ul>
+                <h3 class="accordion">技能與認證</h3>
+                <ul class="accordion">
                     <li>APCS 3 2</li>
                     <li>Yamaha Grade Examination Piano Grade 6</li>
                     <li>中華民國童軍 童軍中級合格</li>
@@ -409,13 +409,13 @@
 
     // --- 動態打字機效果 SCRIPT (無修改) ---
     const typingTextElement = document.getElementById('typing-text');
-    const wordsToType = ["科學人", "資訊人", "童軍", "議題關注者", "創造者"];
+    const wordsToType = ["科學人", "資訊人", "童軍", "議題關注者"];
     let wordIndex = 0; let charIndex = 0; let isDeleting = false;
     function typeEffect() { const currentWord = wordsToType[wordIndex]; let displayText = isDeleting ? currentWord.substring(0, charIndex - 1) : currentWord.substring(0, charIndex + 1); typingTextElement.textContent = displayText; isDeleting ? charIndex-- : charIndex++; if (!isDeleting && charIndex === currentWord.length) { isDeleting = true; setTimeout(typeEffect, 1500); } else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % wordsToType.length; setTimeout(typeEffect, 500); } else { const typingSpeed = isDeleting ? 100 : 200; setTimeout(typeEffect, typingSpeed); } }
     document.addEventListener('DOMContentLoaded', typeEffect);
 
     // --- 摺疊功能 (Accordion) SCRIPT (無修改) ---
-    const accordions = document.querySelectorAll('#resume h3');
+    const accordions = document.querySelectorAll('.accordion');
     accordions.forEach(accordion => {
         accordion.addEventListener('click', () => {
             accordion.classList.toggle('active');
