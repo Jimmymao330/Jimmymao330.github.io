@@ -429,7 +429,7 @@
     const typingTextElement = document.getElementById('typing-text');
     const wordsToType = ["Science lover", "Pianist", "Mountaineer", "Programmer", "Scout", "Issue advocate"];
     let wordIndex = 0; let charIndex = 0; let isDeleting = false;
-    function typeEffect() { const currentWord = wordsToType[wordIndex]; let displayText = isDeleting ? currentWord.substring(0, charIndex - 1) : currentWord.substring(0, charIndex + 1); typingTextElement.textContent = displayText; isDeleting ? charIndex-- : charIndex++; if (!isDeleting && charIndex === currentWord.length) { isDeleting = true; setTimeout(typeEffect, 500); } else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % wordsToType.length; setTimeout(typeEffect, 500); } else { const typingSpeed = isDeleting ? 100 : 200; setTimeout(typeEffect, typingSpeed); } }
+    function typeEffect() { const currentWord = wordsToType[wordIndex]; let displayText = isDeleting ? currentWord.substring(0, charIndex - 1) : currentWord.substring(0, charIndex + 1); typingTextElement.textContent = displayText; isDeleting ? charIndex-- : charIndex++; if (!isDeleting && charIndex === currentWord.length) { isDeleting = true; setTimeout(typeEffect, 1000); } else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % wordsToType.length; setTimeout(typeEffect, 500); } else { const typingSpeed = isDeleting ? 50 : 100; setTimeout(typeEffect, typingSpeed); } }
     document.addEventListener('DOMContentLoaded', typeEffect);
     // --- 摺疊功能 (Accordion) SCRIPT (無修改) ---
     const accordions = document.querySelectorAll('.accordion');
