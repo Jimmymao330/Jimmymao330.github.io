@@ -34,6 +34,7 @@
         :root {
             --primary-glow-color: #00ffff;
             --secondary-glow-color: #ffa200;
+            --third-glow-color: #2fff00;
             --background-color: #0d0c22;
             --card-background: rgba(20, 18, 50, 0.7); /* 加深一點以增強對比 */
             --text-color: #e0e0e0;
@@ -83,9 +84,9 @@
         }
         .language {
             position: fixed; top: 20px; right: 20px; z-index: 100;
-            border: 1px solid var(--primary-glow-color);
+            border: 1px solid var(--third-glow-color);
             padding: 10px 20px;
-            background: rgba(0, 255, 255, 0.1);
+            background: rgba(38, 255, 0, 0.1);
             backdrop-filter: blur(5px);
             border-radius: 5px;
             transition: box-shadow 0.4s var(--ease-out-quint);
@@ -93,12 +94,12 @@
             animation: subtle-float 4s ease-in-out infinite;
         }
         .language:hover {
-             box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+             box-shadow: 0 0 15px rgba(0, 255, 30, 0.5);
         }
         .language h1 {
             margin: 0; color: var(--header-color);
-            font-family: 'Fira Code', monospace; font-size: 1.5rem;
-            text-shadow: 0 0 5px var(--primary-glow-color);
+            font-family: 'Fira Code', monospace; font-size: 1.2rem;
+            text-shadow: 0 0 5px var(--third-glow-color);
         }
         .main-title-container {
             height: 100vh; display: flex; flex-direction: column;
