@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>毛宇禾 Jimmy Mao</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+  <meta name="description" content="Jimmy Mao's Personal Website">
+    
+  <meta name="keywords" content="Jimmy Mao,宇禾,毛毛,臺北市數位實驗高中,數位實驗高中,臺北市數位實中,數位實中,數實">
+  <meta name="author" content="Jimmy Mao">
+  
+  <!-- Open Graph 標籤 -->
+  <meta property="og:title" content="毛宇禾 Jimmy Mao">
+  <meta property="og:description" content="Hello! I'm Jimmy Mao">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jimmymao330.github.io/">
+  <meta property="og:site_name" content="毛宇禾 Jimmy Mao" />
+  
+  <!-- Twitter Card 標籤 -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="毛宇禾 Jimmy Mao">
+  <meta name="twitter:description" content="This is Jimmy Mao's personal website!">
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section id="hero">
+  <canvas id="meteor-canvas"></canvas>
+
+  <div class="signpost" id="signpost">
+    <a href="https://matters.town/@jimmymao330" target="_blank" class="sign sign-right">Blog</a>
+    <a href="index.html" class="sign sign-center">Chinese</a>
+    <a href="https://translate.google.com/translate?hl=zh-TW&sl=zh-TW&tl=en&u=https%3A%2F%2Fjimmymao330.github.io%2Fen.html" class="sign sign-left" target="_blank">More Langs</a>
+    <div class="post"></div>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hello" id="hello">Hi ！</div>
+    <div class="hero-title" id="heroTitle">I'm<span class="name-box">Jimmy</span></div>
+    <div class="hashtags" id="hashtags">from TAIWAN, the Republic of China</div>
+
+    <div class="dots-row" id="dotsRow"></div>
+  </div>
+  <div class="bridge-dot" id="bridgeDot"></div>
+</section>
+<!-- ============ ABOUT ============ -->
+<section class="dark" id="about">
+  <div class="wrap">
+    <h2 class="section-head">Who am I ?</h2>
+    <p class="about-p">Hi! I am Jimmy Mao, or you can call me Maomao, a T-School student. I am a <span class="rotating" id="rotating">Science Lover</span>.</p>
+  </div>
+</section>
+
+<!-- ============ MY JOBS ============ -->
+<!-- 內容由 content.json 的 "jobs" 產生 -->
+<section class="dark" id="jobs" data-content="jobs">
+  <div class="wrap" style="padding-top:0;">
+    <h2 class="section-head">My Jobs</h2>
+    <ul class="jobs-list">
+      <li>Child and Youth Representative of New Taipei City</li>
+      <li>12 Grade Student Representative of T-School</li>
+      <li>Coordinator of the Graduation Organizing Committee of T-School</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 
+<section class="dark collapse-section acc-item" id="resume" data-content="resume">
+  <div class="wrap" style="padding-top:0;">
+    <h2 class="section-head acc-head"><span data-role="title">Resume</span><span class="acc-plus">+</span></h2>
+    <div class="acc-body"><div class="acc-inner" data-role="list"></div></div>
+  </div>
+</section>
+
+
+<section class="dark collapse-section acc-item" id="honors" data-content="honors">
+  <div class="wrap" style="padding-top:0;">
+    <h2 class="section-head acc-head"><span data-role="title">Honors</span><span class="acc-plus">+</span></h2>
+    <div class="acc-body"><div class="acc-inner" data-role="list"></div></div>
+  </div>
+</section>
+
+
+<section class="dark collapse-section acc-item" id="certificates" data-content="certificates">
+  <div class="wrap" style="padding-top:0;">
+    <h2 class="section-head acc-head"><span data-role="title">Certificates</span><span class="acc-plus">+</span></h2>
+    <div class="acc-body"><div class="acc-inner" data-role="list"></div></div>
+  </div>
+</section>
+
+-->
+
+<!-- ============ GALLERY ============ -->
+<section id="gallery">
+  <div class="wrap">
+    <h2 class="section-head">Gallery</h2>
+    <div class="gallery-grid">
+      <div class="photo">
+        <img src="images/gallery-1.webp" alt="This is a photo of Jimmy Mao giving a speech">
+        <div class="caption">Hey! It's me!</div>
+      </div>
+      <div class="photo">
+        <img src="images/gallery-2.webp" alt="This is a photo of Jimmy Mao in his Scout uniform during a camping activity">
+        <div class="caption">I'm a Scout!</div>
+      </div>
+      <div class="photo">
+        <img src="images/gallery-3.webp" alt="This is a photo of Jimmy Mao standing at the head of a suspension bridge with forests as the background">
+        <div class="caption">I love nature!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer id="footer">
+  <div class="footer-wrap">
+    <div class="footer-top">
+      <div class="footer-logo"><img src="logo.webp" alt="This is Jimmy Mao's personal brand logo"></div>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:jimmymao330@email.com">E-mail</a><span class="sep">｜</span>
+      <a href="https://discordapp.com/users/907971087650922526" target="_blank">Discord</a><span class="sep">｜</span>
+      <a href="https://github.com/jimmymao330" target="_blank">GitHub</a>
+    </div>
+    <div class="footer-about"><a href="https://tschool.tp.edu.tw/" target="_blank">About T-School</a></div>
+  </div>
+</footer>
+
+<script>
+  /* ---------- Rotating typing label (delete + retype) with glow ---------- */
+  const roles=['Science Lover','Pianist','Mountaineer','Programmer','Scout','Issue Advocate'];
+  const rotEl=document.getElementById('rotating');
+  let rIdx=0,cIdx=0,deleting=false;
+  function typeLoop(){
+    const word=roles[rIdx];
+    if(!deleting){
+      cIdx++;
+      rotEl.textContent=word.slice(0,cIdx);
+      if(cIdx===word.length){deleting=true;return setTimeout(typeLoop,1500);}
+      setTimeout(typeLoop,80);
+    }else{
+      cIdx--;
+      rotEl.textContent=word.slice(0,cIdx);
+      if(cIdx===0){deleting=false;rIdx=(rIdx+1)%roles.length;return setTimeout(typeLoop,300);}
+      setTimeout(typeLoop,30);
+    }
+  }
+  setTimeout(typeLoop,1000);
+</script>
+
+<script src="script.js"></script>
+
+</body>
+</html>

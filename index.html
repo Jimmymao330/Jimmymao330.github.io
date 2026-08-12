@@ -34,7 +34,8 @@
 
   <div class="signpost" id="signpost">
     <a href="https://matters.town/@jimmymao330" target="_blank" class="sign sign-right">Blog</a>
-    <a href="https://translate.google.com/translate?hl=zh-TW&sl=zh-TW&tl=en&u=https%3A%2F%2Fjimmymao330.github.io%2F" class="sign sign-left" target="_blank">Lauguage</a>
+    <a href="en.html" class="sign sign-center">English</a>
+    <a href="https://translate.google.com/translate?hl=zh-TW&sl=zh-TW&tl=en&u=https%3A%2F%2Fjimmymao330.github.io%2Fen.html" class="sign sign-left" target="_blank">More Langs</a>
     <div class="post"></div>
   </div>
 
@@ -51,7 +52,7 @@
 <section class="dark" id="about">
   <div class="wrap">
     <h2 class="section-head">關於我　Who am I ?</h2>
-    <p class="about-p">我是來自臺北市數位實驗高級中等學校的宇禾，一個 <span class="rotating" id="rotating">科學人</span>。</p>
+    <p class="about-p">我是來自臺北市數位實驗高級中等學校的宇禾，一個 <span class="rotating" id="rotating-en">科學人</span>。</p>
     <p class="about-p">我是個 <span class="role">科學人</span>。從小，我就深深為科學著迷。從國小五年級至今，我總共參與了 4 次科展。這些經歷帶領著我在理科領域的探索，也培養出為人處事上的理性思維。</p>
     <p class="about-p">我是個 <span class="role">音樂人</span>。三歲時因為一個衝動，開始踏進鋼琴的世界。十餘年來，我對於鋼琴的熱愛不曾停歇，我對鋼琴的學習也從未停止。</p>
     <p class="about-p">我是個 <span class="role">登山者</span>。自幼我的父母就常常帶著我和我的弟弟一起去爬山，國小前，我們幾乎每年暑假都會去爬百岳，我十分熱愛山上的環境和爬山的過程～</p>
@@ -115,7 +116,6 @@
         <div class="caption">我熱愛大自然！</div>
       </div>
     </div>
-    <hr class="gallery-line">
   </div>
 </section>
 
@@ -135,6 +135,27 @@
 </footer>
 
 <script src="script.js"></script>
+
+<script>
+  const roles=['科學人','音樂人','登山者','資訊人','童軍','議題關注者'];
+  const rotEl=document.getElementById('rotating');
+  let rIdx=0,cIdx=0,deleting=false;
+  function typeLoop(){
+    const word=roles[rIdx];
+    if(!deleting){
+      cIdx++;
+      rotEl.textContent=word.slice(0,cIdx);
+      if(cIdx===word.length){deleting=true;return setTimeout(typeLoop,1500);}
+      setTimeout(typeLoop,160);
+    }else{
+      cIdx--;
+      rotEl.textContent=word.slice(0,cIdx);
+      if(cIdx===0){deleting=false;rIdx=(rIdx+1)%roles.length;return setTimeout(typeLoop,300);}
+      setTimeout(typeLoop,90);
+    }
+  }
+  setTimeout(typeLoop,1000);
+</script>
 
 </body>
 </html>

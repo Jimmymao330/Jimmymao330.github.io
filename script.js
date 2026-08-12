@@ -114,26 +114,6 @@ function drawMeteors(){
 drawMeteors();
 setInterval(()=>{if(meteors.length<14&&Math.random()<0.7)spawn();},420);
 
-/* ---------- Rotating typing label (delete + retype) with glow ---------- */
-const roles=['科學人','音樂人','登山者','資訊人','童軍','議題關注者'];
-const rotEl=document.getElementById('rotating');
-let rIdx=0,cIdx=0,deleting=false;
-function typeLoop(){
-  const word=roles[rIdx];
-  if(!deleting){
-    cIdx++;
-    rotEl.textContent=word.slice(0,cIdx);
-    if(cIdx===word.length){deleting=true;return setTimeout(typeLoop,1500);}
-    setTimeout(typeLoop,160);
-  }else{
-    cIdx--;
-    rotEl.textContent=word.slice(0,cIdx);
-    if(cIdx===0){deleting=false;rIdx=(rIdx+1)%roles.length;return setTimeout(typeLoop,300);}
-    setTimeout(typeLoop,90);
-  }
-}
-setTimeout(typeLoop,1000);
-
 /* ---------- Accordions ---------- */
 document.querySelectorAll('.acc-head').forEach(head=>{
   head.addEventListener('click',()=>{
