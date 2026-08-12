@@ -137,6 +137,27 @@
 <script src="script.js"></script>
 
 <script>
+  const skills=[
+    {label:'資料整理',   icon:'', size:5},
+    {label:'系統思考', icon:'', size:10},
+    {label:'程式設計', icon:'', size:20},
+    {label:'自主學習', icon:'', size:30},
+    {label:'溝通表達', icon:'', size:20},
+    {label:'專案管理',   icon:'', size:10},
+    {label:'組織領導',   icon:'', size:5},
+  ];
+  function buildDots(){
+    const row=document.getElementById('dotsRow');
+    skills.forEach(s=>{
+      const d=document.createElement('div');
+      d.className='dot';
+      d.style.width=s.size+'px';
+      d.style.height=s.size+'px';
+      d.innerHTML=`<span class="icon">${s.icon}</span><span class="label">${s.label}</span>`;
+      row.appendChild(d);
+    });
+  }
+  ////////////////////////////////////////////////
   const roles=['科學人','音樂人','登山者','資訊人','童軍','議題關注者'];
   const rotEl=document.getElementById('rotating');
   let rIdx=0,cIdx=0,deleting=false;

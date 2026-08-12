@@ -56,28 +56,6 @@ function loadContent(){
     });
 }
 
-/* ---------- Skill dots ---------- */
-/* NOTE: 使用者稍後會提供正式技能清單與 icon，此處先用內文五種身份作為佔位。 */
-const skills=[
-  {label:'資料整理',   icon:'', size:5},
-  {label:'系統思考', icon:'', size:10},
-  {label:'程式設計', icon:'', size:20},
-  {label:'自主學習', icon:'', size:30},
-  {label:'溝通表達', icon:'', size:20},
-  {label:'專案管理',   icon:'', size:10},
-  {label:'組織領導',   icon:'', size:5},
-];
-function buildDots(){
-  const row=document.getElementById('dotsRow');
-  skills.forEach(s=>{
-    const d=document.createElement('div');
-    d.className='dot';
-    d.style.width=s.size+'px';
-    d.style.height=s.size+'px';
-    d.innerHTML=`<span class="icon">${s.icon}</span><span class="label">${s.label}</span>`;
-    row.appendChild(d);
-  });
-}
 
 /* ---------- Meteor shower (top-right -> bottom-left) ---------- */
 const canvas=document.getElementById('meteor-canvas');

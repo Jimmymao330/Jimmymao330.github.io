@@ -132,7 +132,27 @@
 </footer>
 
 <script>
-  /* ---------- Rotating typing label (delete + retype) with glow ---------- */
+  const skills=[
+    {label:'Data Organization',   icon:'', size:5},
+    {label:'System Thinking', icon:'', size:10},
+    {label:'Programming', icon:'', size:20},
+    {label:'Self-Learning', icon:'', size:30},
+    {label:'Communication', icon:'', size:20},
+    {label:'Project Management',   icon:'', size:10},
+    {label:'Organizational Leadership',   icon:'', size:5},
+  ];
+  function buildDots(){
+    const row=document.getElementById('dotsRow');
+    skills.forEach(s=>{
+      const d=document.createElement('div');
+      d.className='dot';
+      d.style.width=s.size+'px';
+      d.style.height=s.size+'px';
+      d.innerHTML=`<span class="icon">${s.icon}</span><span class="label">${s.label}</span>`;
+      row.appendChild(d);
+    });
+  }
+  ////////////////////////////////////////////////
   const roles=['Science Lover','Pianist','Mountaineer','Programmer','Scout','Issue Advocate'];
   const rotEl=document.getElementById('rotating');
   let rIdx=0,cIdx=0,deleting=false;
