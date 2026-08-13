@@ -273,9 +273,6 @@
   .footer-links a{color:var(--text-light);text-decoration:none;transition:color .25s ease;}
   .footer-links a:hover{color:#fff;}
   .footer-links .sep{color:rgba(255,255,255,.3);}
-  .footer-about{margin-top:10px;font-size:14px;color:var(--text-light);}
-  .footer-about a{color:var(--text-light);text-decoration:none;transition:color .25s ease;}
-  .footer-about a:hover{color:#fff;}
 
   @media (max-width:700px){
     .dots-row{bottom: 10px;}
