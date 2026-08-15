@@ -136,6 +136,21 @@
     display:flex;align-items:center;justify-content:center;
     color:transparent;
     margin: 0 10px;
+    
+  }
+  @keyframes dot-pulse{
+    0%   {box-shadow:0 0 0 0 rgba(171, 171, 171, 0.35);}
+    70%  {box-shadow:0 0 0 20px rgba(171, 171, 171, 0);}
+    100% {box-shadow:0 0 0 0 rgba(171, 171, 171, 0);}
+  }
+  .dot:nth-child(4){animation:dot-pulse 1s ease-out infinite;}
+  .dot::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    bottom: -30px;
+    left: -30px;
+    right: -30px;
   }
   .dot .icon{font-size:0;transition:font-size .3s ease;line-height:1;}
   .dot .label{
@@ -150,10 +165,9 @@
     transition:opacity .3s ease;
     letter-spacing:1px;
   }
-  .dot:hover{background:var(--dark-gray);transform:scale(1.6);}
+  .dot:hover{background:var(--dark-gray);transform:scale(1.6);animation:none; /* hover 時停止脈動，交給原本的放大效果 */}
   .dot:hover .icon{font-size:20px;}
   .dot:hover .label{opacity:1;}
-
   /* bridging big dot */
   .bridge-dot{
     position:absolute;
