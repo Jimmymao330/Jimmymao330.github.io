@@ -379,9 +379,6 @@
 }
 .contact-toast.show{opacity:1;transform:translate(-50%,0);}
 
-@media (prefers-reduced-motion:reduce){
-  .contact-card,.contact-card.is-pending:hover{animation:none;transition:none;}
-}
 /* ============ RWD ============ */
 
 /* 手機瀏覽器網址列不會擋住首頁 */
@@ -454,7 +451,7 @@
   .contact-card:nth-child(even):hover{transform:none;box-shadow:0 6px 18px rgba(0,0,0,.12);}
   .contact-card:active{transform:scale(.97);}
   .contact-card.is-pending:hover{animation:none;}
-  .contact-card.is-pending:active{animation:contact-wiggle .4s ease;}
+  .contact-card.is-pending:active{animation:contact-wiggle .2s ease;}
 
   .sign:hover{transform:none;}
 }
