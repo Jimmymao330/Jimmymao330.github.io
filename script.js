@@ -1,6 +1,6 @@
 /* ---------- HERO text reveal ---------- */
-window.addEventListener('load',()=>{
-  const seq=[['hello',100],['heroTitle',500],['hashtags',900],['signpost',1000]];
+function revealHero(){
+  const seq=[['hello',100],['heroTitle',300],['hashtags',600],['signpost',800]];
   seq.forEach(([id,delay])=>{
     setTimeout(()=>{
       const el=document.getElementById(id);
@@ -8,8 +8,11 @@ window.addEventListener('load',()=>{
       el.style.opacity='1';
     },delay);
   });
+}
+document.addEventListener('DOMContentLoaded',()=>{
   buildDots();
   loadContent();
+  revealHero();
 });
 
 /* ---------- Content from content.json ---------- */
@@ -60,9 +63,15 @@ function loadContent(){
 /* ---------- Meteor shower (top-right -> bottom-left) ---------- */
 const canvas=document.getElementById('meteor-canvas');
 const ctx=canvas.getContext('2d');
+const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let W,H,meteors=[];
+let meteorRafId=null,spawnTimer=null,heroVisible=true,meteorsReady=false;
+
 function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
-resize();window.addEventListener('resize',resize);
+resize();
+let resizeRaf;
+window.addEventListener('resize',()=>{cancelAnimationFrame(resizeRaf);resizeRaf=requestAnimationFrame(resize);});
+
 function spawn(){
   meteors.push({
     x:W*(0.5+Math.random()*0.6),
@@ -76,7 +85,6 @@ function drawMeteors(){
   ctx.clearRect(0,0,W,H);
   for(let i=meteors.length-1;i>=0;i--){
     const m=meteors[i];
-    // direction: down-left (dx negative, dy positive)
     const dx=-1,dy=1;
     const tailX=m.x-dx*m.len, tailY=m.y-dy*m.len;
     const grad=ctx.createLinearGradient(m.x,m.y,tailX,tailY);
@@ -87,8 +95,23 @@ function drawMeteors(){
     m.x+=dx*m.speed;m.y+=dy*m.speed;
     if(m.x<-100||m.y>H+100)meteors.splice(i,1);
   }
-  requestAnimationFrame(drawMeteors);
+  meteorRafId=requestAnimationFrame(drawMeteors);
 }
+function startMeteors(){
+  if(meteorRafId!==null) return;
+  spawnTimer=setInterval(()=>{if(meteors.length<14&&Math.random()<0.7)spawn();},420);
+  meteorRafId=requestAnimationFrame(drawMeteors);
+}
+function stopMeteors(){
+  if(meteorRafId!==null){cancelAnimationFrame(meteorRafId);meteorRafId=null;}
+  clearInterval(spawnTimer);
+}
+function updateMeteors(){
+  (meteorsReady && heroVisible && !document.hidden && !reduceMotion) ? startMeteors() : stopMeteors();
+}
+new IntersectionObserver(([entry])=>{heroVisible=entry.isIntersecting;updateMeteors();}).observe(canvas);
+document.addEventListener('visibilitychange',updateMeteors);
+window.addEventListener('load',()=>{meteorsReady=true;updateMeteors();});
 drawMeteors();
 setInterval(()=>{if(meteors.length<14&&Math.random()<0.7)spawn();},420);
 
@@ -110,9 +133,51 @@ document.querySelectorAll('.acc-head').forEach(head=>{
 /* ---------- Bridge dot animation on scroll ---------- */
 const bridge=document.getElementById('bridgeDot');
 const hero=document.getElementById('hero');
+let heroH=hero.offsetHeight,bridgeTicking=false;
+window.addEventListener('resize',()=>{heroH=hero.offsetHeight;},{passive:true});
 window.addEventListener('scroll',()=>{
-  const rect=hero.getBoundingClientRect();
-  const progress=Math.min(1,Math.max(0,-rect.top/(rect.height*0.6)));
-  const scale=progress*14; // grows large enough to fill bridge into dark section
-  bridge.style.transform=`translateX(-50%) scale(${scale})`;
+  if(bridgeTicking) return;
+  bridgeTicking=true;
+  requestAnimationFrame(()=>{
+    const progress=Math.min(1,Math.max(0,window.scrollY/(heroH*0.6)));
+    bridge.style.transform=`translateX(-50%) scale(${progress*14})`;
+    bridgeTicking=false;
+  });
 },{passive:true});
+
+/* ---------- Accordions: 視窗大小改變時重新計算展開高度 ---------- */
+let accResizeTimer;
+window.addEventListener('resize',()=>{
+  clearTimeout(accResizeTimer);
+  accResizeTimer=setTimeout(()=>{
+    document.querySelectorAll('.acc-item.open .acc-body').forEach(body=>{
+      body.style.maxHeight=body.scrollHeight+'px';
+    });
+  },150);
+});
+
+/* ---------- Gallery lightbox ---------- */
+(function(){
+  const photos=document.querySelectorAll('#gallery .photo');
+  if(!photos.length||!window.HTMLDialogElement) return;
+  const box=document.createElement('dialog');
+  box.className='lightbox';
+  box.innerHTML='<button class="lightbox-close" type="button" aria-label="關閉">×</button><img alt=""><p class="lightbox-caption"></p>';
+  document.body.appendChild(box);
+  const bImg=box.querySelector('img'),bCap=box.querySelector('.lightbox-caption');
+  photos.forEach(p=>{
+    const img=p.querySelector('img');
+    if(!img) return;
+    p.setAttribute('role','button');
+    p.tabIndex=0;
+    const open=()=>{
+      bImg.src=img.currentSrc||img.src;
+      bImg.alt=img.alt;
+      bCap.textContent=p.querySelector('.caption')?.textContent||'';
+      box.showModal();
+    };
+    p.addEventListener('click',open);
+    p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
+  });
+  box.addEventListener('click',()=>box.close());
+})();

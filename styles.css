@@ -1,6 +1,3 @@
-@import url("https://font.emtech.cc/css/GenSenRoundedTW");
-
-
 :root{
     --white:#ffffff;
     --light-gray:#e9e9e9;
@@ -13,7 +10,7 @@
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
-    font-family: "GenSenRoundedTW", sans-serif;
+    font-family:"GenSenRoundedTW","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
     color:#1a1a1a;
     line-height:1.9;
     overflow-x:hidden;
@@ -294,3 +291,250 @@
     .hello{margin-left:2%;}
     .hashtags{left: 10%;}
   }
+
+  /* ============ CONTACT ============ */
+#contact{background:var(--light-gray);}
+#contact .section-head{color:var(--darker);border-bottom:2px solid var(--darker);}
+.contact-intro{color:#6b6b6b;font-size:16px;margin-bottom:34px;}
+
+.contact-group{margin-bottom:40px;}
+.contact-group:last-child{margin-bottom:0;}
+.contact-group-title{
+  display:inline-block;
+  color: var(--dark-gray);
+  font-size:16px;font-weight:700;letter-spacing:2px;
+  margin:0 0 22px 0px;
+}
+
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;}
+
+/* 已開通的卡片 */
+.contact-card{
+  position:relative;display:flex;align-items:center;gap:14px;
+  padding:16px 18px;border-radius:12px;
+  background:var(--dark-gray);color:#fff;text-decoration:none;
+  border:2px solid var(--dark-gray);
+  box-shadow:0 6px 18px rgba(0,0,0,.12);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1), background .25s ease, border-color .25s ease, box-shadow .3s ease;
+}
+.contact-card:hover,
+.contact-card:focus-visible{
+  background:#1b1b1b;border-color:#1b1b1b;outline:none;
+  transform:translateY(-4px) rotate(-1.5deg);
+  box-shadow:0 12px 28px rgba(0,0,0,.22);
+}
+.contact-card:nth-child(even):hover{transform:translateY(-4px) rotate(1.5deg);}
+
+.contact-icon{
+  flex:none;width:42px;height:42px;border-radius:50%;
+  background:rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center;
+}
+.contact-icon svg{width:22px;height:22px;fill:currentColor;}
+.contact-icon svg.stroke{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.contact-text{display:flex;flex-direction:column;line-height:1.4;min-width:0;}
+.contact-name{font-size:16px;font-weight:700;letter-spacing:1px;}
+.contact-sub{font-size:13px;color:var(--text-light);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.contact-arrow{margin-left:auto;font-size:18px;opacity:.6;transition:transform .25s ease, opacity .25s ease;}
+.contact-card:hover .contact-arrow{transform:translateX(4px);opacity:1;}
+
+/* 尚未開通的卡片 */
+.contact-card.is-pending{
+  background:transparent;color:#9a9a9a;
+  border:2px dashed var(--dot-gray);
+  box-shadow:none;cursor:not-allowed;
+}
+.contact-card.is-pending .contact-icon{background:var(--light-gray);}
+.contact-card.is-pending .contact-sub{color:#b5b5b5;}
+.contact-card.is-pending:hover,
+.contact-card.is-pending:focus-visible{
+  background:#fafafa;border-color:#b5b5b5;
+  transform:none;box-shadow:none;
+  animation:contact-wiggle .4s ease;
+}
+/* 「尚未開通」斜貼標籤 */
+.contact-badge{
+  position:absolute;top:-11px;right:12px;
+  background:var(--white);color:var(--dark-gray);
+  border:1.5px solid var(--dark-gray);border-radius:4px;
+  font-size:11px;font-weight:700;letter-spacing:2px;line-height:1.6;
+  padding:1px 8px;transform:rotate(-3deg);
+}
+@keyframes contact-wiggle{
+  0%,100%{transform:rotate(0);}
+  25%{transform:rotate(-1.5deg);}
+  75%{transform:rotate(1.5deg);}
+}
+
+/* 點擊未開通連結時的提示 */
+.contact-toast{
+  position:fixed;left:50%;bottom:32px;z-index:1000;
+  transform:translate(-50%,20px);
+  background:var(--dark-gray);color:#fff;
+  padding:10px 22px;border-radius:999px;
+  font-size:14px;letter-spacing:1px;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  opacity:0;pointer-events:none;
+  transition:opacity .3s ease, transform .3s ease;
+}
+.contact-toast.show{opacity:1;transform:translate(-50%,0);}
+
+@media (prefers-reduced-motion:reduce){
+  .contact-card,.contact-card.is-pending:hover{animation:none;transition:none;}
+}
+/* ============ RWD ============ */
+
+/* 手機瀏覽器網址列不會擋住首頁 */
+@supports (height:100svh){
+  #hero{min-height:100svh;}
+}
+
+/* 相簿：修正 clamp 最小值大於最大值 */
+.photo{width:clamp(180px,26vw,220px);}
+
+/* ---------- 平板 ---------- */
+@media (max-width:900px){
+  .wrap{padding-left:24px;padding-right:24px;}
+  .gallery-grid{gap:28px;}
+}
+
+/* ---------- 手機 ---------- */
+@media (max-width:700px){
+  .wrap{padding:56px 20px;}
+  .footer-wrap{padding:48px 20px 64px;}
+  .acc-plus{font-size:28px;}
+
+  /* 路標：往內移、字加大、按鈕變大 */
+  .signpost{right:56px;}
+  .sign{font-size:12px;letter-spacing:1.5px;}
+  .sign-right{padding:7px 26px 6px 20px;}
+  .sign-center{padding:7px 16px 6px 26px;}
+  .sign-left{right:-40px;padding:7px 16px 6px 26px;}
+
+  /* 技能圓點：間距縮小，名稱不超出畫面 */
+  .dot{margin:0 4px;}
+
+  /* 相簿：一排一張，照片放大 */
+  .gallery-grid{gap:32px;}
+
+  /* 聯絡我 */
+  .contact-intro{font-size:15px;margin-bottom:26px;}
+  .contact-group{margin-bottom:32px;}
+  .contact-grid{gap:16px;}
+  .contact-card{padding:14px 16px;}
+}
+
+/* ---------- 小手機 ---------- */
+@media (max-width:400px){
+  .hashtags{font-size:13px;letter-spacing:2px;left:6%;}
+  .hello{left:-18%;}
+  .contact-grid{grid-template-columns:1fr;}
+}
+
+/* ---------- 橫向手機（畫面很矮） ---------- */
+@media (max-height:500px) and (orientation:landscape){
+  #hero{min-height:auto;padding:40px 24px 120px;}
+  .signpost .post{height:120px;}
+  .dots-row{bottom:0;min-height:80px;}
+}
+
+/* ---------- 觸控裝置：hover 才看得到的內容改成直接顯示 ---------- */
+.dot:focus{outline:none;}
+.dot:focus{background:var(--dark-gray);transform:scale(1.6);animation:none;}
+.dot:focus .icon{font-size:20px;}
+.dot:focus .label{opacity:1;}
+
+@media (hover:none){
+  .photo .caption{opacity:1;}
+  .photo:hover{box-shadow:0 8px 24px rgba(0,0,0,.15);}
+  .photo:nth-child(odd):hover{transform:rotate(-4deg);}
+  .photo:nth-child(even):hover{transform:rotate(3deg);}
+
+  .contact-card:hover,
+  .contact-card:nth-child(even):hover{transform:none;box-shadow:0 6px 18px rgba(0,0,0,.12);}
+  .contact-card:active{transform:scale(.97);}
+  .contact-card.is-pending:hover{animation:none;}
+  .contact-card.is-pending:active{animation:contact-wiggle .4s ease;}
+
+  .sign:hover{transform:none;}
+}
+
+/* 提示訊息：避開 iPhone 底部的橫條，長字不超出畫面 */
+.contact-toast{
+  bottom:calc(24px + env(safe-area-inset-bottom));
+  max-width:calc(100% - 32px);
+  text-align:center;
+}
+
+/* ============ 效能：技能圓點脈動改用 GPU 友善動畫 ============ */
+.dot:nth-child(4){animation:none;}
+.dot:nth-child(4)::after{
+  content:'';position:absolute;inset:0;z-index:-1;
+  border-radius:50%;background:rgba(171,171,171,.35);
+  animation:dot-pulse-ring 1s ease-out infinite;
+  pointer-events:none;
+}
+@keyframes dot-pulse-ring{
+  0%{transform:scale(1);opacity:1;}
+  70%,100%{transform:scale(2.3);opacity:0;}
+}
+.dot:nth-child(4):hover::after,
+.dot:nth-child(4):focus::after{animation:none;opacity:0;}
+.bridge-dot{will-change:transform;}
+.photo img{height:auto;}
+
+/* ============ 行動版閱讀：文字 ============ */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+.about-p,.jobs-list li,.acc-inner li{line-break:strict;} /* 避免標點落在行首 */
+
+@media (max-width:700px){
+  .about-p,.jobs-list li,.acc-inner li{
+    font-size:16px;line-height:1.95;letter-spacing:.03em;
+    color:#d6d6d6; /* 比 #bdbdbd 亮一點，戶外強光下較好讀 */
+  }
+  .about-p{text-align:justify;text-justify:inter-character;margin-bottom:26px;}
+  .jobs-list li:last-child,.acc-inner li:last-child{border-bottom:none;}
+}
+
+/* ============ 行動版閱讀：相簿改成左右滑動 ============ */
+.gallery-hint{display:none;}
+
+@media (max-width:700px){
+  .gallery-grid{
+    flex-wrap:nowrap;justify-content:flex-start;gap:20px;
+    overflow-x:auto;scroll-snap-type:x mandatory;
+    margin:0 -20px;padding:24px 20px 32px;
+    scrollbar-width:none;
+  }
+  .gallery-grid::-webkit-scrollbar{display:none;}
+  .photo{flex:0 0 78%;width:auto;scroll-snap-align:center;}
+  .gallery-hint{
+    display:block;text-align:center;
+    font-size:13px;letter-spacing:2px;color:#8a8a8a;
+  }
+}
+
+/* 拍立得下方白邊直接寫說明文字（手機與觸控裝置） */
+@media (max-width:700px), (hover:none){
+  .photo{padding-bottom:14px;}
+  .photo .caption{
+    position:static;opacity:1;background:none;
+    color:#555;font-size:14px;padding:10px 0 0;
+  }
+}
+
+/* ============ 相簿：點擊看大圖 ============ */
+.lightbox{
+  width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;
+  margin:0;padding:0;border:none;background:transparent;
+}
+.lightbox[open]{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
+.lightbox::backdrop{background:rgba(20,20,20,.92);}
+.lightbox img{max-width:min(92vw,900px);max-height:80vh;object-fit:contain;border-radius:4px;}
+.lightbox-caption{color:#eee;font-size:15px;letter-spacing:1px;text-align:center;padding:0 20px;}
+.lightbox-close{
+  position:absolute;top:calc(12px + env(safe-area-inset-top));right:16px;
+  width:44px;height:44px;border:none;border-radius:50%;
+  background:rgba(255,255,255,.12);color:#fff;font-size:26px;line-height:1;cursor:pointer;
+}
+html:has(.lightbox[open]){overflow:hidden;}
